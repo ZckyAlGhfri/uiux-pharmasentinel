@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karantina & Retur Obat Kedaluwarsa - PharmaSentinel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* Re-check spesifik warna untuk modul Karantina */
+        .card-karantina {
+            background: #ffffff;
+            border: 1.5px solid var(--border-subtle);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-card);
+        }
+        .badge-expired {
+            background-color: #ffe4e6 !important;
+            color: #be123c !important;
+            border: 1px solid #fecdd3;
+            font-weight: 700;
+        }
+        .badge-locked {
+            background-color: #f1f5f9 !important;
+            color: #334155 !important;
+            border: 1px solid #cbd5e1;
+            font-weight: 700;
+        }
+        .btn-retur {
+            background-color: #0d9488 !important;
+            color: #ffffff !important;
+            font-weight: 700;
+            border: none;
+        }
+        .btn-retur:hover {
+            background-color: #0f766e !important;
+        }
+        .btn-musnahkan {
+            background-color: #0f172a !important;
+            color: #ffffff !important;
+            font-weight: 700;
+            border: none;
+        }
+        .btn-musnahkan:hover {
+            background-color: #1e293b !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. DYNAMIC ISLAND (SUDAH DIPERLEBAR & ANTI-CLIPPING) -->
+    <nav class="dynamic-island-nav" title="Dekatkan kursor untuk membuka menu navigasi">
+        <a href="admin-dashboard.html" class="island-brand">
+            <i class="bi bi-shield-check"></i>
+            <span>PharmaSentinel</span>
+        </a>
+        <div class="island-pulse-dot"></div>
+
+        <div class="island-collapsible-content">
+            <ul class="island-menu">
+                <li>
+                    <a href="admin-dashboard.html" class="island-link">
+                        <i class="bi bi-radar"></i> Radar & Telemetri
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-batch.html" class="island-link">
+                        <i class="bi bi-box-seam"></i> Penerimaan Batch
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-karantina.html" class="island-link active">
+                        <i class="bi bi-shield-slash"></i> Karantina ED
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-katalog.html" class="island-link">
+                        <i class="bi bi-database"></i> Master Katalog
+                    </a>
+                </li>
+            </ul>
+
+            <div class="island-user">
+                <span class="badge badge-role" style="background: #e0e7ff; color: #4338ca;">ADMIN</span>
+                <span class="island-user-name">M. Zacky (Lead)</span>
+                <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. WORKSPACE KARANTINA -->
+    <div class="workspace-wrapper" style="margin-top: 95px;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold m-0" style="color: var(--text-heading);">Karantina & Penanganan Obat Kedaluwarsa</h3>
+                <p class="small m-0" style="color: var(--text-muted);">Batch obat yang melewati masa simpan otomatis dikunci dari meja kasir dan wajib diproses retur atau pemusnahan resmi.</p>
+            </div>
+            <span class="badge px-3 py-2 rounded-pill shadow-sm" style="background: #ffe4e6; color: #be123c; border: 1px solid #fecdd3;">
+                <i class="bi bi-lock-fill me-1"></i> Auto-Lock Kasir POS Aktif
+            </span>
+        </div>
+
+        <!-- BENTO STATISTIK KARANTINA -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="card-karantina p-3" style="border-left: 4px solid var(--danger-red);">
+                    <small class="fw-bold" style="color: var(--text-muted);">Batch Terisolasi (Locked)</small>
+                    <h3 class="fw-bold m-0 mt-1" style="color: var(--danger-red);">2 <small class="fs-6" style="color: var(--text-muted);">Batch Fisik</small></h3>
+                    <small style="color: var(--text-muted);">100% terisolasi dari pencarian kasir</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-karantina p-3" style="border-left: 4px solid var(--warning-amber);">
+                    <small class="fw-bold" style="color: var(--text-muted);">Estimasi Nilai Klaim Retur</small>
+                    <h3 class="fw-bold m-0 mt-1" style="color: var(--warning-amber);">Rp 146.500</h3>
+                    <small style="color: var(--text-muted);">Dapat diklaim penggantian ke PBF</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-karantina p-3" style="border-left: 4px solid var(--brand-teal);">
+                    <small class="fw-bold" style="color: var(--text-muted);">Kepatuhan Regulasi BPOM</small>
+                    <h3 class="fw-bold m-0 mt-1" style="color: var(--brand-teal);">100% Audit-Ready</h3>
+                    <small style="color: var(--text-muted);">Tidak ada penghapusan data sembarangan</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABEL DAFTAR BATCH YANG DIKARANTINA -->
+        <div class="card-karantina p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h6 class="fw-bold m-0" style="color: var(--text-heading);"><i class="bi bi-archive text-danger me-2"></i>Daftar Obat Berstatus Karantina</h6>
+                    <small style="color: var(--text-muted);">Pilih tindakan resmi untuk mengeluarkan batch dari gudang fisik apotek.</small>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr style="font-size: 0.76rem; text-transform: uppercase;">
+                            <th>Nomor Batch</th>
+                            <th>Nama Obat</th>
+                            <th>Distributor Asal</th>
+                            <th>Batas ED Fisik</th>
+                            <th>Sisa Stok</th>
+                            <th>Nilai Modal</th>
+                            <th>Status Akses Kasir</th>
+                            <th class="text-center">Tindakan Legal</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 0.88rem;">
+                        <!-- BARIS 1 -->
+                        <tr id="row-batch-1">
+                            <td><code>BTH-PCT-EXP1</code></td>
+                            <td><strong style="color: var(--text-heading);">Paracetamol 500mg</strong> <span class="badge bg-light text-secondary border small">Tablet</span></td>
+                            <td style="color: var(--text-muted);">PT. Kimia Farma Trading</td>
+                            <td><span class="badge badge-expired px-2 py-1">10 Okt 2026 (Expired)</span></td>
+                            <td><strong style="color: var(--danger-red);">5 Strip</strong></td>
+                            <td style="color: var(--text-heading);">Rp 26.000</td>
+                            <td><span class="badge badge-locked"><i class="bi bi-slash-circle me-1"></i>Diblir Kasir</span></td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button class="btn btn-sm btn-retur px-3 rounded-pill" onclick="triggerRetur('BTH-PCT-EXP1', 'Paracetamol 500mg', 'PT. Kimia Farma Trading', '5 Strip')">
+                                        <i class="bi bi-arrow-return-left me-1"></i> Retur PBF
+                                    </button>
+                                    <button class="btn btn-sm btn-musnahkan px-3 rounded-pill" onclick="triggerPemusnahan('BTH-PCT-EXP1', 'Paracetamol 500mg', '5 Strip')">
+                                        <i class="bi bi-trash3 me-1"></i> Musnahkan
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- BARIS 2 -->
+                        <tr id="row-batch-2">
+                            <td><code>BTH-AMX-OLD</code></td>
+                            <td><strong style="color: var(--text-heading);">Amoxicillin 500mg</strong> <span class="badge bg-light text-secondary border small">Kapsul</span></td>
+                            <td style="color: var(--text-muted);">PT. Kalbe Farma Tbk</td>
+                            <td><span class="badge badge-expired px-2 py-1">14 Okt 2026 (Expired)</span></td>
+                            <td><strong style="color: var(--danger-red);">12 Strip</strong></td>
+                            <td style="color: var(--text-heading);">Rp 120.500</td>
+                            <td><span class="badge badge-locked"><i class="bi bi-slash-circle me-1"></i>Diblir Kasir</span></td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button class="btn btn-sm btn-retur px-3 rounded-pill" onclick="triggerRetur('BTH-AMX-OLD', 'Amoxicillin 500mg', 'PT. Kalbe Farma Tbk', '12 Strip')">
+                                        <i class="bi bi-arrow-return-left me-1"></i> Retur PBF
+                                    </button>
+                                    <button class="btn btn-sm btn-musnahkan px-3 rounded-pill" onclick="triggerPemusnahan('BTH-AMX-OLD', 'Amoxicillin 500mg', '12 Strip')">
+                                        <i class="bi bi-trash3 me-1"></i> Musnahkan
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL 1: CETAK SURAT RETUR DISTRIBUTOR -->
+    <div class="modal fade" id="modalRetur" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 p-3 border-0 shadow">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold" style="color: var(--text-heading);"><i class="bi bi-file-earmark-arrow-up text-teal me-2" style="color: var(--brand-teal);"></i>Surat Pengajuan Retur PBF</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small" style="color: var(--text-muted);">Sistem akan menerbitkan formulir retur resmi untuk klaim tukar guling atau nota kredit kepada distributor.</p>
+                    <div class="p-3 rounded-3 mb-3" style="background: #f8fafc; border: 1px solid var(--border-subtle);">
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span style="color: var(--text-muted);">Nomor Batch:</span>
+                            <strong id="returBatch" style="color: var(--text-heading);">-</strong>
+                        </div>
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span style="color: var(--text-muted);">Nama Obat:</span>
+                            <strong id="returObat" style="color: var(--text-heading);">-</strong>
+                        </div>
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span style="color: var(--text-muted);">Distributor Tujuan:</span>
+                            <strong id="returPBF" style="color: var(--text-heading);">-</strong>
+                        </div>
+                        <div class="d-flex justify-content-between small">
+                            <span style="color: var(--text-muted);">Jumlah Dikembalikan:</span>
+                            <strong id="returQty" style="color: var(--danger-red);">-</strong>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold" style="color: var(--text-heading);">Alasan Pengembalian</label>
+                        <select class="form-select rounded-pill px-3">
+                            <option>Kedaluwarsa sebelum terjual (Sesuai Perjanjian Retur)</option>
+                            <option>Kemasan/Segel Rusak dari Pabrik</option>
+                            <option>Penarikan Produk Resmi (Recall BPOM)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-retur w-100 py-2 rounded-pill" onclick="prosesCetakRetur()">
+                        <i class="bi bi-printer me-1"></i> Cetak Surat Jalan Retur & Terbitkan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedRowId = '';
+
+        function triggerRetur(batchNo, obat, pbf, qty) {
+            document.getElementById('returBatch').innerText = batchNo;
+            document.getElementById('returObat').innerText = obat;
+            document.getElementById('returPBF').innerText = pbf;
+            document.getElementById('returQty').innerText = qty;
+            
+            selectedRowId = batchNo === 'BTH-PCT-EXP1' ? 'row-batch-1' : 'row-batch-2';
+            new bootstrap.Modal(document.getElementById('modalRetur')).show();
+        }
+
+        function prosesCetakRetur() {
+            alert('Surat Pengajuan Retur Resmi berhasil diterbitkan (PDF Simulated)! Status batch diubah menjadi "DIKEMBALIKAN KE PBF".');
+            bootstrap.Modal.getInstance(document.getElementById('modalRetur')).hide();
+            
+            // Hapus baris dari tabel aktif karantina sebagai simulasi sukses
+            const row = document.getElementById(selectedRowId);
+            if (row) {
+                row.style.transition = 'all 0.5s ease';
+                row.style.opacity = '0';
+                setTimeout(() => row.remove(), 500);
+            }
+        }
+
+        function triggerPemusnahan(batchNo, obat, qty) {
+            const konfirmasi = confirm(`PERINGATAN AUDIT: Apakah Anda yakin ingin mencatat PEMUSNAHAN FISIK untuk batch ${batchNo} (${obat} - ${qty})?\n\nTindakan ini akan menerbitkan Berita Acara Pemusnahan (BAP) resmi BPOM.`);
+            if (konfirmasi) {
+                alert(`Berita Acara Pemusnahan Obat untuk batch ${batchNo} berhasil dicetak! Data disimpan secara permanen di riwayat audit logistik.`);
+                const row = (batchNo === 'BTH-PCT-EXP1') ? document.getElementById('row-batch-1') : document.getElementById('row-batch-2');
+                if (row) {
+                    row.style.transition = 'all 0.5s ease';
+                    row.style.opacity = '0';
+                    setTimeout(() => row.remove(), 500);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

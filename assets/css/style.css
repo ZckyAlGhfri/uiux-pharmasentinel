@@ -1,0 +1,464 @@
+/* ==========================================================================
+   THEME: EDITORIAL LIGHT COCKPIT + IPHONE DYNAMIC ISLAND MORPH
+   ========================================================================== */
+:root {
+    --bg-app: #f1f5f9;
+    --surface-card: #ffffff;
+    --surface-glass-dark: rgba(15, 23, 42, 0.95);
+
+    --border-subtle: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --shadow-card: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
+    --shadow-hover: 0 12px 28px -4px rgba(13, 148, 136, 0.16);
+
+    --brand-teal: #0d9488;
+    --brand-teal-light: #ccfbf1;
+    --brand-teal-dark: #0f766e;
+
+    --danger-red: #e11d48;
+    --danger-red-light: #ffe4e6;
+    --warning-amber: #d97706;
+    --warning-amber-light: #fef3c7;
+    --success-green: #059669;
+    --success-green-light: #d1fae5;
+
+    --text-heading: #0f172a;
+    --text-body: #1e293b;
+    --text-muted: #475569;
+    --text-dim: #64748b;
+
+    --radius-pill: 9999px;
+    --radius-card: 20px;
+    --radius-item: 16px;
+
+    /* Kurva Pegas Dynamic Island Apple */
+    --island-spring: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-app);
+    color: var(--text-body);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* ==========================================================================
+   PERBAIKAN DYNAMIC ISLAND: LEBAR DINAMIS & ANTI-CLIPPING
+   ========================================================================== */
+.dynamic-island-nav {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface-glass-dark);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: var(--radius-pill);
+    padding: 6px 14px;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 16px 36px -6px rgba(15, 23, 42, 0.35);
+    transition: var(--island-spring);
+    cursor: pointer;
+    overflow: hidden;
+    max-width: 210px; /* Ukuran compact saat idle */
+}
+
+/* KETIKA DI-HOVER: MELEBAR LEGA AGAR SEMUA MENU & USER TERLIHAT */
+.dynamic-island-nav:hover {
+    max-width: 1100px !important; /* DITINGKATKAN: Muat untuk seluruh menu admin */
+    padding: 6px 20px;
+    box-shadow: 0 20px 45px -4px rgba(13, 148, 136, 0.25), 0 16px 36px -6px rgba(15, 23, 42, 0.4);
+    border-color: rgba(45, 212, 191, 0.4);
+}
+
+.island-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    color: #ffffff !important;
+    font-weight: 800;
+    font-size: 0.92rem;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.island-pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    margin-left: 8px;
+    box-shadow: 0 0 8px #10b981;
+    transition: var(--island-spring);
+    flex-shrink: 0;
+}
+
+.dynamic-island-nav:hover .island-pulse-dot {
+    display: none;
+}
+
+.island-collapsible-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    transition: var(--island-spring);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.dynamic-island-nav:hover .island-collapsible-content {
+    opacity: 1;
+    max-width: 900px !important; /* DITINGKATKAN: Mencegah user terpotong */
+    pointer-events: auto;
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.island-menu {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.island-link {
+    color: #cbd5e1 !important;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.island-link:hover {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.island-link.active {
+    color: #0f172a !important;
+    background: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-weight: 700;
+}
+
+/* USER PROFILE: DIKUNCI AGAR TIDAK BISA MENYUSUT */
+.island-user {
+    padding-left: 10px;
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0 !important; /* DIKUNCI: Wajib selalu tampil utuh */
+}
+
+.island-user-name {
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 0.82rem;
+    white-space: nowrap;
+}
+
+.badge-role {
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+/* FIX KONTRAS SEMUA TOMBOL GELAP (BTN-DARK & AUDIT REPORT) */
+.btn-dark, .btn-dark *, button[class*="btn-dark"] * {
+    color: #ffffff !important;
+}
+
+.btn-dark:hover {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   LAYOUT KOKPIT UMUM & KOMPONEN
+   ========================================================================== */
+.top-cockpit-bar {
+    max-width: 1400px;
+    margin: 85px auto 20px auto;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.omni-hud {
+    background: var(--surface-card);
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow-card);
+    transition: all 0.25s ease;
+}
+
+.omni-hud:focus-within {
+    border-color: var(--brand-teal);
+    box-shadow: 0 8px 24px -2px rgba(13, 148, 136, 0.2);
+    transform: translateY(-2px);
+}
+
+.omni-input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 500;
+    background: transparent;
+    color: var(--text-heading);
+}
+
+.category-chips-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.chip-btn {
+    background: #ffffff;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    padding: 6px 16px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.chip-btn:hover {
+    border-color: var(--brand-teal);
+    color: var(--brand-teal-dark);
+    background: var(--brand-teal-light);
+}
+
+.chip-btn.active {
+    background: var(--brand-teal);
+    border-color: var(--brand-teal);
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+}
+
+.workspace-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px 40px 24px;
+}
+
+.cockpit-grid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 24px;
+    align-items: start;
+}
+
+.product-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.card-medicine {
+    background: var(--surface-card);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: var(--radius-item);
+    padding: 16px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: var(--shadow-card);
+}
+
+.card-medicine:hover {
+    border-color: var(--brand-teal);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.fefo-pill-box {
+    background: #f8fafc;
+    border-left: 3px solid var(--brand-teal);
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin: 10px 0;
+    font-size: 0.76rem;
+    color: var(--text-heading);
+}
+
+.right-companion-pane {
+    background: var(--surface-card);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    box-shadow: var(--shadow-card);
+    position: sticky;
+    top: 90px;
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.shift-companion-state {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.scanner-radar-box {
+    background: radial-gradient(circle at 50% 50%, #f0fdf4 0%, #ffffff 100%);
+    border: 2px dashed #86efac;
+    border-radius: var(--radius-item);
+    padding: 28px 16px;
+    text-align: center;
+    margin: 16px 0;
+}
+
+.scanner-radar-icon {
+    width: 52px;
+    height: 52px;
+    background: #dcfce7;
+    color: var(--success-green);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    animation: scannerPulse 2s infinite;
+}
+
+@keyframes scannerPulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 14px rgba(5, 150, 105, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+}
+
+.active-cart-state {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+}
+
+.fefo-split-tag {
+    background: var(--warning-amber-light);
+    color: #92400e;
+    font-weight: 800;
+    font-size: 0.68rem;
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.bento-admin-stat {
+    background: var(--surface-card);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    padding: 22px;
+    box-shadow: var(--shadow-card);
+    height: 100%;
+    transition: all 0.25s ease;
+}
+
+.bento-admin-stat:hover {
+    transform: translateY(-3px);
+    border-color: var(--brand-teal);
+    box-shadow: var(--shadow-hover);
+}
+
+.radar-timeline-track {
+    background: #e2e8f0;
+    height: 8px;
+    border-radius: var(--radius-pill);
+    position: relative;
+    margin: 24px 0 16px 0;
+}
+
+.radar-timeline-fill {
+    background: linear-gradient(90deg, #e11d48 0%, #f59e0b 50%, #059669 100%);
+    height: 100%;
+    border-radius: var(--radius-pill);
+    width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6, .fw-bold {
+    color: var(--text-heading) !important;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.table {
+    color: var(--text-heading) !important;
+}
+
+.table thead th {
+    background-color: #f8fafc !important;
+    color: var(--text-muted) !important;
+    font-weight: 700;
+    border-bottom: 2px solid var(--border-subtle);
+}
+
+.table tbody tr:hover td {
+    background-color: #f8fafc !important;
+}
+
+.form-control, .form-select {
+    background-color: #ffffff !important;
+    border-color: var(--border-strong) !important;
+    color: var(--text-heading) !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--brand-teal) !important;
+    box-shadow: 0 0 0 4px var(--brand-teal-light) !important;
+}
+
+code {
+    color: var(--brand-teal-dark) !important;
+    background: var(--brand-teal-light) !important;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+}

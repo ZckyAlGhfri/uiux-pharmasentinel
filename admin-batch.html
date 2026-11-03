@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penerimaan Batch Obat - PharmaSentinel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- 1. DYNAMIC ISLAND NAV -->
+    <nav class="dynamic-island-nav" title="Dekatkan kursor untuk membuka menu navigasi">
+        <a href="admin-dashboard.html" class="island-brand">
+            <i class="bi bi-shield-check"></i>
+            <span>PharmaSentinel</span>
+        </a>
+        <div class="island-pulse-dot"></div>
+
+        <div class="island-collapsible-content">
+            <ul class="island-menu">
+                <li>
+                    <a href="admin-dashboard.html" class="island-link">
+                        <i class="bi bi-radar"></i> Radar & Telemetri
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-batch.html" class="island-link active">
+                        <i class="bi bi-box-seam"></i> Penerimaan Batch
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-karantina.html" class="island-link">
+                        <i class="bi bi-shield-slash"></i> Karantina ED
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-katalog.html" class="island-link">
+                        <i class="bi bi-database"></i> Master Katalog
+                    </a>
+                </li>
+            </ul>
+
+            <div class="island-user">
+                <span class="badge badge-role" style="background: #e0e7ff; color: #4338ca;">ADMIN</span>
+                <span class="island-user-name d-none d-md-inline">M. Zacky (Lead)</span>
+                <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. WORKSPACE PENERIMAAN BATCH -->
+    <div class="workspace-wrapper" style="margin-top: 95px;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold m-0">Penerimaan Logistik & Batch Baru</h3>
+                <p class="text-muted small m-0">Registrasi kedatangan obat fisik dari distributor (PBF) langsung ke antrean FEFO.</p>
+            </div>
+            <span class="badge bg-white text-dark border px-3 py-2 rounded-pill shadow-sm">
+                <i class="bi bi-shield-check text-success"></i> Auto-Sorting FEFO Enabled
+            </span>
+        </div>
+
+        <div class="row g-4">
+            <!-- FORMULIR INPUT BATCH (KIRI) -->
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm rounded-4 p-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
+                    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                        <i class="bi bi-file-earmark-plus text-teal fs-5" style="color: var(--brand-teal);"></i>
+                        <h6 class="fw-bold m-0">Formulir Surat Jalan PBF</h6>
+                    </div>
+
+                    <form onsubmit="handleBatchEntry(event)">
+                        <!-- PILIH DISTRIBUTOR -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Distributor / PBF Pengirim</label>
+                            <select class="form-select rounded-pill px-3" required id="inputDistributor">
+                                <option value="">-- Pilih Instansi PBF --</option>
+                                <option>PT. Kimia Farma Trading</option>
+                                <option>PT. Kalbe Farma Tbk</option>
+                                <option>PT. Dexa Medica</option>
+                                <option>PT. Mensa Bina Sukses</option>
+                            </select>
+                        </div>
+
+                        <!-- NOMOR FAKTUR -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Nomor Surat Jalan / Faktur</label>
+                            <input type="text" class="form-control rounded-pill px-3" placeholder="Contoh: SJ-2026/KF/1089" required id="inputFaktur">
+                        </div>
+
+                        <hr class="my-3" style="border-color: var(--border-subtle);">
+
+                        <!-- PILIH OBAT -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Pilih Katalog Master Obat</label>
+                            <select class="form-select rounded-pill px-3" required id="inputObat">
+                                <option value="">-- Pilih Obat --</option>
+                                <option value="Paracetamol 500mg">Paracetamol 500mg (Tablet)</option>
+                                <option value="Amoxicillin 500mg">Amoxicillin 500mg (Kapsul)</option>
+                                <option value="Cetirizine 10mg">Cetirizine 10mg (Tablet)</option>
+                                <option value="OBH Tropica Plus 100ml">OBH Tropica Plus 100ml (Sirup)</option>
+                            </select>
+                        </div>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">Nomor Batch Pabrik</label>
+                                <input type="text" class="form-control rounded-pill px-3" placeholder="Contoh: BTH-2026-X1" required id="inputBatchNo">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold text-danger">Tgl Kedaluwarsa (ED)</label>
+                                <input type="date" class="form-control rounded-pill px-3 border-danger" required id="inputED">
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mb-4">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">Jumlah Kuantitas</label>
+                                <input type="number" class="form-control rounded-pill px-3" placeholder="Kuantitas fisik" min="1" required id="inputQty">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">Harga Beli Modal (Rp)</label>
+                                <input type="number" class="form-control rounded-pill px-3" placeholder="Rp per unit" required id="inputModal">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark w-100 py-3 rounded-pill fw-bold" style="background: var(--brand-teal); border: none;">
+                            <i class="bi bi-box-arrow-in-down me-1"></i> Masukkan ke Antrean FEFO
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- LOG PENERIMAAN BATCH TERBARU (KANAN) -->
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm rounded-4 p-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="fw-bold m-0"><i class="bi bi-clock-history text-muted me-2"></i>Log Penerimaan Batch Terbaru</h6>
+                            <small class="text-muted">Batch yang baru masuk otomatis disortir posisinya sesuai tanggal kedaluwarsa.</small>
+                        </div>
+                        <span class="badge bg-light text-dark border rounded-pill px-2">Hari Ini: 28 Okt 2026</span>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr style="font-size: 0.76rem; text-transform: uppercase;">
+                                    <th>No. Batch</th>
+                                    <th>Nama Obat</th>
+                                    <th>Distributor</th>
+                                    <th>Batas ED</th>
+                                    <th>Qty Masuk</th>
+                                    <th>Status FEFO</th>
+                                </tr>
+                            </thead>
+                            <tbody id="batchLogTableBody" style="font-size: 0.88rem;">
+                                <tr>
+                                    <td><code>BTH-PCT-A2</code></td>
+                                    <td><strong>Paracetamol 500mg</strong></td>
+                                    <td>PT. Kimia Farma</td>
+                                    <td><span class="text-success fw-bold">20 Jan 2027</span></td>
+                                    <td><strong>10 Strip</strong></td>
+                                    <td><span class="badge bg-success-subtle text-success rounded-pill">Antrean 2 (Aman)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><code>BTH-AMX-09</code></td>
+                                    <td><strong>Amoxicillin 500mg</strong></td>
+                                    <td>PT. Kalbe Farma</td>
+                                    <td><span class="text-danger fw-bold">05 Nov 2026</span></td>
+                                    <td><strong>4 Strip</strong></td>
+                                    <td><span class="badge bg-danger-subtle text-danger rounded-pill">Prioritas 1 Kasir</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleBatchEntry(e) {
+            e.preventDefault();
+            
+            const obat = document.getElementById("inputObat").value;
+            const batchNo = document.getElementById("inputBatchNo").value;
+            const ed = document.getElementById("inputED").value;
+            const qty = document.getElementById("inputQty").value;
+            const pbf = document.getElementById("inputDistributor").value;
+
+            // VALIDASI FEFO: Tolak jika ED sudah lampau
+            const today = "2026-10-28";
+            if (ed <= today) {
+                alert("PELANGGARAN FEFO: Tanggal kedaluwarsa yang dimasukkan sama dengan atau lebih lampau dari hari ini! Obat kedaluwarsa ditolak masuk sistem.");
+                return;
+            }
+
+            // Tambahkan baris baru ke tabel simulasi
+            const tbody = document.getElementById("batchLogTableBody");
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><code>${batchNo}</code></td>
+                <td><strong>${obat}</strong></td>
+                <td>${pbf}</td>
+                <td><span class="text-teal fw-bold" style="color: var(--brand-teal);">${ed}</span></td>
+                <td><strong>${qty} Unit</strong></td>
+                <td><span class="badge bg-primary-subtle text-primary rounded-pill">Tercatat Aktif</span></td>
+            `;
+            tbody.insertBefore(tr, tbody.firstChild);
+
+            alert(`Batch ${batchNo} untuk obat ${obat} berhasil dicatat dan masuk ke antrean FEFO!`);
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasir POS - PharmaSentinel Cockpit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- 1. FLOATING DYNAMIC ISLAND (ALA IPHONE: MINIMALIS -> MEKAR SAAT HOVER) -->
+    <nav class="dynamic-island-nav" title="Dekatkan kursor untuk membuka menu navigasi">
+        <a href="index.html" class="island-brand">
+            <i class="bi bi-capsule-pill"></i>
+            <span>PharmaSentinel</span>
+        </a>
+        <div class="island-pulse-dot" title="Sistem Aktif"></div>
+
+        <!-- KONTEN INI OTOMATIS MEKAR SAAT HOVER -->
+        <div class="island-collapsible-content">
+            <ul class="island-menu">
+                <li>
+                    <a href="kasir-pos.html" class="island-link active">
+                        <i class="bi bi-cart3"></i> Kasir POS
+                    </a>
+                </li>
+                <li>
+                    <a href="kasir-riwayat.html" class="island-link">
+                        <i class="bi bi-receipt"></i> Riwayat Shift
+                    </a>
+                </li>
+                <li>
+                    <a href="kasir-stok.html" class="island-link">
+                        <i class="bi bi-search"></i> Cek Stok
+                    </a>
+                </li>
+            </ul>
+
+            <div class="island-user">
+                <span class="badge badge-role" style="background: var(--brand-teal-light); color: var(--brand-teal);">KASIR</span>
+                <span class="island-user-name d-none d-md-inline">Denna A. (Kelompok 6)</span>
+                <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. TOP COCKPIT BAR (OMNI SEARCH + CATEGORY CHIPS) -->
+    <div class="top-cockpit-bar">
+        <div class="omni-hud">
+            <i class="bi bi-search text-muted fs-5"></i>
+            <input type="text" class="omni-input" id="searchBar" placeholder="Cari obat berdasarkan nama, bentuk sediaan, atau scan barcode..." oninput="handleSearch(this.value)">
+            <span class="badge bg-light text-muted border px-2 py-1 small">ESC Clear</span>
+        </div>
+
+        <!-- CATEGORY CHIPS FILTER -->
+        <div class="category-chips-row">
+            <button class="chip-btn active" onclick="filterCategory('Semua', this)">Semua Obat (8)</button>
+            <button class="chip-btn" onclick="filterCategory('Analgesik', this)">Analgesik (2)</button>
+            <button class="chip-btn" onclick="filterCategory('Antibiotik', this)">Antibiotik (2)</button>
+            <button class="chip-btn" onclick="filterCategory('Sirup', this)">Sirup (1)</button>
+            <button class="chip-btn" onclick="filterCategory('Antihistamin', this)">Antihistamin (1)</button>
+            <button class="chip-btn" onclick="filterCategory('Lambung', this)">Lambung (1)</button>
+        </div>
+    </div>
+
+    <!-- 3. MAIN WORKSPACE COCKPIT (DUAL PANE SEIMBANG) -->
+    <div class="workspace-wrapper">
+        <div class="cockpit-grid">
+            
+            <!-- KOLOM KIRI: KATALOG OBAT LENGKAP -->
+            <div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="fw-bold m-0"><i class="bi bi-grid-fill text-muted me-2"></i>Katalog Obat Siap Jual</h6>
+                    <small class="text-muted"><i class="bi bi-check-circle-fill text-success"></i> Seluruh batch terverifikasi FEFO</small>
+                </div>
+
+                <div class="product-card-grid" id="productGridContainer">
+                    <!-- Kartu-kartu obat diinjeksi via JavaScript -->
+                </div>
+            </div>
+
+            <!-- KOLOM KANAN: DUAL STATE (SHIFT COMPANION ATAU STRUK KASIR) -->
+            <div class="right-companion-pane">
+                
+                <!-- STATE A: SAAT KERANJANG KOSONG (PANEL ASISTEN SHIFT KASIR) -->
+                <div id="shiftCompanionState" class="shift-companion-state">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center pb-2 border-bottom">
+                            <h6 class="fw-bold m-0"><i class="bi bi-speedometer2 text-teal me-2" style="color: var(--brand-teal);"></i>Status Shift Kasir</h6>
+                            <span class="badge bg-success-subtle text-success rounded-pill px-2">Shift Aktif</span>
+                        </div>
+
+                        <!-- STATISTIK KASIR HARI INI -->
+                        <div class="row g-2 my-3">
+                            <div class="col-6">
+                                <div class="p-3 rounded-3 bg-light border">
+                                    <small class="text-muted">Total Nota Shift</small>
+                                    <h4 class="fw-bold m-0 mt-1" id="statTrxCount">18</h4>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 rounded-3 bg-light border">
+                                    <small class="text-muted">Omzet Hari Ini</small>
+                                    <h6 class="fw-bold m-0 mt-2 text-truncate" style="color: var(--brand-teal);" id="statRevenue">Rp 845.000</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SCANNER RADAR STANDBY -->
+                        <div class="scanner-radar-box">
+                            <div class="scanner-radar-icon mb-2">
+                                <i class="bi bi-upc-scan"></i>
+                            </div>
+                            <h6 class="fw-bold m-0">Scanner Barcode Siap</h6>
+                            <p class="text-muted small m-0 mt-1">Arahkan barcode fisik atau klik obat di katalog untuk memulai transaksi.</p>
+                        </div>
+
+                        <!-- PANDUAN PINTASAN KEYBOARD -->
+                        <div class="p-3 rounded-3 bg-light border mt-2">
+                            <div class="fw-bold small mb-2"><i class="bi bi-keyboard me-2"></i>Pintasan Kasir Cepat:</div>
+                            <div class="d-flex justify-content-between small text-muted mb-1">
+                                <span>Cari Obat</span>
+                                <span class="badge bg-white text-dark border">Ketik di atas</span>
+                            </div>
+                            <div class="d-flex justify-content-between small text-muted">
+                                <span>Batal / Reset Nota</span>
+                                <span class="badge bg-white text-dark border">Klik Reset</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center pt-3 border-top text-muted small">
+                        <i class="bi bi-info-circle me-1"></i> Mode otomatis: FEFO Engine aktif
+                    </div>
+                </div>
+
+                <!-- STATE B: SAAT OBAT DIPILIH (STRUK TRANSAKSI & FEFO SPLIT) -->
+                <div id="activeCartState" class="active-cart-state">
+                    <div class="d-flex justify-content-between align-items-center pb-2 border-bottom">
+                        <div>
+                            <h6 class="fw-bold m-0"><i class="bi bi-receipt-cutoff me-2"></i>Struk Transaksi</h6>
+                            <small class="text-muted">#INV-20261028-019</small>
+                        </div>
+                        <button class="btn btn-link text-danger text-decoration-none btn-sm p-0 fw-bold" onclick="clearCart()">
+                            <i class="bi bi-trash"></i> Reset
+                        </button>
+                    </div>
+
+                    <!-- DAFTAR ITEM BELANJA & FEFO ALLOCATION -->
+                    <div id="cartItemsList" style="flex: 1; max-height: 340px; overflow-y: auto; padding: 12px 0;">
+                        <!-- Diinjeksi via JS -->
+                    </div>
+
+                    <!-- TOTAL & PEMBAYARAN -->
+                    <div class="pt-3 border-top">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted fw-bold">Total Nilai:</span>
+                            <h4 class="fw-bold m-0" style="color: var(--brand-teal);" id="cartTotalText">Rp 0</h4>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="number" class="form-control rounded-pill text-center py-2" id="inputUang" placeholder="Nominal Uang Diterima (Rp)" oninput="calcChange()">
+                            <div class="text-end small mt-1 fw-bold" id="labelKembalian"></div>
+                        </div>
+
+                        <button class="btn btn-dark w-100 py-3 rounded-pill fw-bold shadow-sm" onclick="finalizeTransaction()">
+                            <i class="bi bi-printer me-1"></i> Proses & Potong Batch
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPT DATA & KASIR INTERAKSI -->
+    <script src="assets/js/data.js"></script>
+    <script>
+        let cart = {}; // Format: { "PCT-500": qty }
+        let currentCategory = "Semua";
+
+        // Render Katalog Obat
+        function renderCatalog(filterText = "") {
+            const container = document.getElementById("productGridContainer");
+            container.innerHTML = "";
+
+            const filtered = APOTEK_DB.medicines.filter(m => {
+                const matchName = m.name.toLowerCase().includes(filterText.toLowerCase()) ||
+                                  m.category.toLowerCase().includes(filterText.toLowerCase());
+                const matchCat = (currentCategory === "Semua") || (m.category === currentCategory);
+                return matchName && matchCat;
+            });
+
+            filtered.forEach(med => {
+                const totalStock = getTotalStock(med);
+                const isOutOfStock = totalStock <= 0;
+                const closestBatch = med.batches[0];
+
+                const card = document.createElement("div");
+                card.className = "card-medicine";
+                card.onclick = () => addDrugToCart(med.id);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="badge bg-light text-dark border small">${med.category}</span>
+                            <span class="badge" style="background: var(--brand-teal-light); color: var(--brand-teal); font-size: 0.7rem;">
+                                Sisa: ${totalStock} ${med.unit}
+                            </span>
+                        </div>
+                        <div class="fw-bold mt-1">${med.name}</div>
+                        <small class="text-muted d-block">${med.form} • ${med.code}</small>
+                        
+                        <div class="fefo-pill-box">
+                            <div class="text-muted" style="font-size: 0.68rem;">FEFO Terdekat:</div>
+                            <strong>${closestBatch.batchNo}</strong> (ED: ${closestBatch.edFormatted})
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+                        <span class="fw-bold" style="color: var(--brand-teal);">Rp ${med.price.toLocaleString('id-ID')}</span>
+                        <button class="btn btn-sm btn-outline-dark rounded-circle" style="width: 28px; height: 28px; padding: 0;">+</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Filter Kategori Tombol Pil
+        function filterCategory(catName, btnElement) {
+            currentCategory = catName;
+            document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active'));
+            if (btnElement) btnElement.classList.add('active');
+            renderCatalog(document.getElementById("searchBar").value);
+        }
+
+        // Tambah ke Keranjang
+        function addDrugToCart(medId) {
+            const med = APOTEK_DB.medicines.find(m => m.id === medId);
+            const maxStock = getTotalStock(med);
+            const currentQty = cart[medId] || 0;
+
+            if (currentQty >= maxStock) {
+                alert(`Peringatan: Stok ${med.name} hanya tersisa ${maxStock} unit. Tidak bisa menambah melebihi kuota batch fisik!`);
+                return;
+            }
+
+            cart[medId] = currentQty + 1;
+            updateCartUI();
+        }
+
+        function removeDrugFromCart(medId) {
+            if (cart[medId]) {
+                cart[medId] -= 1;
+                if (cart[medId] <= 0) {
+                    delete cart[medId];
+                }
+            }
+            updateCartUI();
+        }
+
+        function clearCart() {
+            cart = {};
+            updateCartUI();
+            document.getElementById("inputUang").value = "";
+            document.getElementById("labelKembalian").innerText = "";
+        }
+
+        // Render Struk & Pergantian State Panel Kanan
+        function updateCartUI() {
+            const shiftState = document.getElementById("shiftCompanionState");
+            const cartState = document.getElementById("activeCartState");
+            const itemsList = document.getElementById("cartItemsList");
+            const keys = Object.keys(cart);
+
+            // BERALIH ANTARA STATE SHIFT vs STATE STRUK KASIR
+            if (keys.length > 0) {
+                shiftState.style.display = "none";
+                cartState.style.display = "flex";
+            } else {
+                shiftState.style.display = "flex";
+                cartState.style.display = "none";
+                return;
+            }
+
+            itemsList.innerHTML = "";
+            let grandTotal = 0;
+
+            keys.forEach(medId => {
+                const med = APOTEK_DB.medicines.find(m => m.id === medId);
+                const qty = cart[medId];
+                const subtotal = qty * med.price;
+                grandTotal += subtotal;
+
+                const fefoResult = calculateFEFOAllocation(med, qty);
+
+                let allocationHTML = "";
+                fefoResult.allocation.forEach(alloc => {
+                    allocationHTML += `
+                        <div class="d-flex justify-content-between text-muted" style="font-size: 0.74rem;">
+                            <span><i class="bi bi-box-arrow-right text-success"></i> ${alloc.batchNo} (${alloc.edFormatted})</span>
+                            <strong class="text-dark">${alloc.takenQty} ${med.unit}</strong>
+                        </div>
+                    `;
+                });
+
+                const itemRow = document.createElement("div");
+                itemRow.className = "p-2 rounded border mb-2 bg-light";
+                itemRow.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong class="small">${med.name}</strong>
+                        <div class="d-flex align-items-center gap-1">
+                            <button class="btn btn-sm btn-outline-secondary py-0 px-2 rounded-circle" onclick="removeDrugFromCart('${med.id}')">-</button>
+                            <span class="small fw-bold px-1">${qty}</span>
+                            <button class="btn btn-sm btn-outline-secondary py-0 px-2 rounded-circle" onclick="addDrugToCart('${med.id}')">+</button>
+                        </div>
+                    </div>
+
+                    <div class="p-2 rounded mt-2 border bg-white">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="text-muted" style="font-size: 0.68rem; font-weight: 700;">ALOKASI BATCH FEFO:</span>
+                            ${fefoResult.isSplit ? '<span class="fefo-split-tag"><i class="bi bi-diagram-2"></i> SPLIT BATCH</span>' : '<span class="badge bg-light text-dark" style="font-size: 0.65rem;">1 Batch</span>'}
+                        </div>
+                        ${allocationHTML}
+                    </div>
+
+                    <div class="text-end small fw-bold mt-1 text-teal" style="color: var(--brand-teal);">
+                        Rp ${subtotal.toLocaleString('id-ID')}
+                    </div>
+                `;
+                itemsList.appendChild(itemRow);
+            });
+
+            document.getElementById("cartTotalText").innerText = "Rp " + grandTotal.toLocaleString('id-ID');
+            calcChange();
+        }
+
+        function calcChange() {
+            let total = 0;
+            Object.keys(cart).forEach(id => {
+                const med = APOTEK_DB.medicines.find(m => m.id === id);
+                total += (cart[id] * med.price);
+            });
+
+            const uang = parseFloat(document.getElementById("inputUang").value) || 0;
+            const label = document.getElementById("labelKembalian");
+
+            if (uang === 0) {
+                label.innerText = "";
+            } else if (uang < total) {
+                label.innerText = `Kurang: Rp ${(total - uang).toLocaleString('id-ID')}`;
+                label.className = "text-end small mt-1 fw-bold text-danger";
+            } else {
+                label.innerText = `Kembalian: Rp ${(uang - total).toLocaleString('id-ID')}`;
+                label.className = "text-end small mt-1 fw-bold text-success";
+            }
+        }
+
+        function finalizeTransaction() {
+            alert("Transaksi Berhasil Diproses! Stok batch telah terpotong secara otomatis via FEFO Engine.");
+            clearCart();
+        }
+
+        function handleSearch(val) {
+            renderCatalog(val);
+        }
+
+        // Render perdana
+        renderCatalog();
+    </script>
+</body>
+</html>

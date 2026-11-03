@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Katalog Obat - PharmaSentinel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- 1. DYNAMIC ISLAND NAV (ADMIN GUDANG - FULL ACTIVE) -->
+    <nav class="dynamic-island-nav" title="Dekatkan kursor untuk membuka menu navigasi">
+        <a href="admin-dashboard.html" class="island-brand">
+            <i class="bi bi-shield-check"></i>
+            <span>PharmaSentinel</span>
+        </a>
+        <div class="island-pulse-dot"></div>
+
+        <div class="island-collapsible-content">
+            <ul class="island-menu">
+                <li>
+                    <a href="admin-dashboard.html" class="island-link">
+                        <i class="bi bi-radar"></i> Radar & Telemetri
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-batch.html" class="island-link">
+                        <i class="bi bi-box-seam"></i> Penerimaan Batch
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-karantina.html" class="island-link">
+                        <i class="bi bi-shield-slash"></i> Karantina ED
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-katalog.html" class="island-link active">
+                        <i class="bi bi-database"></i> Master Katalog
+                    </a>
+                </li>
+            </ul>
+
+            <div class="island-user">
+                <span class="badge badge-role" style="background: #e0e7ff; color: #4338ca;">ADMIN</span>
+                <span class="island-user-name">M. Zacky (Lead)</span>
+                <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. WORKSPACE MASTER KATALOG -->
+    <div class="workspace-wrapper" style="margin-top: 95px;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold m-0" style="color: var(--text-heading);">Master Katalog Obat & Formula</h3>
+                <p class="small m-0" style="color: var(--text-muted);">Kelola master SKU, klasifikasi terapi obat, harga jual eceran, dan ambang batas peringatan stok tipis.</p>
+            </div>
+            <button class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm" style="background: var(--brand-teal); border: none;" data-bs-toggle="modal" data-bs-target="#modalTambahObat">
+                <i class="bi bi-plus-lg me-1"></i> Tambah Master Obat
+            </button>
+        </div>
+
+        <!-- BENTO RINGKASAN KATALOG -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 p-3" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
+                    <small class="fw-bold" style="color: var(--text-muted);">Total SKU Terdaftar</small>
+                    <h3 class="fw-bold m-0 mt-1" style="color: var(--text-heading);">8 <small class="fs-6 text-muted">SKU Aktif</small></h3>
+                    <small class="text-success"><i class="bi bi-check2"></i> 100% Memiliki Induk Batch</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 p-3" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
+                    <small class="fw-bold" style="color: var(--text-muted);">Kategori Farmakologi</small>
+                    <h3 class="fw-bold m-0 mt-1" style="color: var(--brand-teal);">5 <small class="fs-6 text-muted">Kategori</small></h3>
+                    <small style="color: var(--text-muted);">Analgesik, Antibiotik, dll</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 p-3" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important; border-left: 4px solid var(--warning-amber) !important;">
+                    <small class="fw-bold" style="color: var(--warning-amber);">Mendekati Stok Batas</small>
+                    <h3 class="fw-bold m-0 mt-1" style="color: var(--warning-amber);">2 <small class="fs-6 text-muted">Obat</small></h3>
+                    <small style="color: var(--text-muted);">Stok di bawah ambang alert</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 p-3" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
+                    <small class="fw-bold" style="color: var(--text-muted);">Rata-rata Margin Jual</small>
+                    <h3 class="fw-bold m-0 mt-1" style="color: var(--text-heading);">32.4%</h3>
+                    <small class="text-success"><i class="bi bi-graph-up-arrow"></i> Sehat secara finansial</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABEL KATALOG MASTER OBAT -->
+        <div class="card border-0 shadow-sm rounded-4 p-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold m-0" style="color: var(--text-heading);"><i class="bi bi-table text-teal me-2" style="color: var(--brand-teal);"></i>Daftar Master Katalog Obat</h6>
+                <div class="input-group" style="max-width: 300px;">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" class="form-control form-control-sm border-start-0" placeholder="Filter kode atau nama obat..." oninput="filterKatalog(this.value)">
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr style="font-size: 0.76rem; text-transform: uppercase;">
+                            <th>Kode Obat</th>
+                            <th>Nama Obat</th>
+                            <th>Kategori & Sediaan</th>
+                            <th>Harga Jual Kasir</th>
+                            <th>Ambang Alert (Min. Stok)</th>
+                            <th>Stok Akumulasi Fisik</th>
+                            <th class="text-center">Aksi Manajemen</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableKatalogBody" style="font-size: 0.88rem;">
+                        <!-- BARIS OBAT 1 -->
+                        <tr>
+                            <td><code>OBT-001</code></td>
+                            <td><strong style="color: var(--text-heading);">Paracetamol 500mg</strong></td>
+                            <td>
+                                <span class="badge bg-light text-dark border">Analgesik</span>
+                                <span class="badge bg-secondary-subtle text-secondary">Tablet</span>
+                            </td>
+                            <td><strong style="color: var(--brand-teal);">Rp 8.000</strong> <small style="color: var(--text-muted);">/ Strip</small></td>
+                            <td>
+                                <span class="badge bg-light text-dark border">Min: 5 Strip</span>
+                            </td>
+                            <td><strong style="color: var(--text-heading);">13 Strip</strong> <small class="text-success">(Aman)</small></td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-dark rounded-pill px-3" onclick="editThreshold('OBT-001', 'Paracetamol 500mg', 5, 8000)">
+                                    <i class="bi bi-sliders me-1"></i> Atur Ambang
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- BARIS OBAT 2 -->
+                        <tr>
+                            <td><code>OBT-002</code></td>
+                            <td><strong style="color: var(--text-heading);">Amoxicillin 500mg</strong></td>
+                            <td>
+                                <span class="badge bg-light text-dark border">Antibiotik</span>
+                                <span class="badge bg-secondary-subtle text-secondary">Kapsul</span>
+                            </td>
+                            <td><strong style="color: var(--brand-teal);">Rp 12.000</strong> <small style="color: var(--text-muted);">/ Strip</small></td>
+                            <td>
+                                <span class="badge bg-warning-subtle text-warning-emphasis border">Min: 5 Strip</span>
+                            </td>
+                            <td><strong style="color: var(--danger-red);">4 Strip</strong> <small class="text-danger fw-bold">(Stok Tipis!)</small></td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-dark rounded-pill px-3" onclick="editThreshold('OBT-002', 'Amoxicillin 500mg', 5, 12000)">
+                                    <i class="bi bi-sliders me-1"></i> Atur Ambang
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- BARIS OBAT 3 -->
+                        <tr>
+                            <td><code>OBT-006</code></td>
+                            <td><strong style="color: var(--text-heading);">Antasida Doen Suspensi</strong></td>
+                            <td>
+                                <span class="badge bg-light text-dark border">Lambung</span>
+                                <span class="badge bg-secondary-subtle text-secondary">Suspensi</span>
+                            </td>
+                            <td><strong style="color: var(--brand-teal);">Rp 11.000</strong> <small style="color: var(--text-muted);">/ Botol</small></td>
+                            <td>
+                                <span class="badge bg-warning-subtle text-warning-emphasis border">Min: 5 Botol</span>
+                            </td>
+                            <td><strong style="color: var(--danger-red);">3 Botol</strong> <small class="text-danger fw-bold">(Stok Tipis!)</small></td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-dark rounded-pill px-3" onclick="editThreshold('OBT-006', 'Antasida Doen Suspensi', 5, 11000)">
+                                    <i class="bi bi-sliders me-1"></i> Atur Ambang
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 1: TAMBAH MASTER OBAT -->
+    <div class="modal fade" id="modalTambahObat" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 p-3 border-0 shadow">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold" style="color: var(--text-heading);"><i class="bi bi-capsule text-teal me-2" style="color: var(--brand-teal);"></i>Tambah Master Katalog Obat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small" style="color: var(--text-muted);">Menambahkan entitas master obat baru ke dalam sistem sebelum didaftarkan batch fisiknya.</p>
+                    <form onsubmit="simpanMasterObat(event)">
+                        <div class="row g-2 mb-3">
+                            <div class="col-5">
+                                <label class="form-label small fw-bold">Kode Obat (SKU)</label>
+                                <input type="text" class="form-control rounded-pill px-3" placeholder="Contoh: OBT-009" required>
+                            </div>
+                            <div class="col-7">
+                                <label class="form-label small fw-bold">Kategori Terapi</label>
+                                <select class="form-select rounded-pill px-3" required>
+                                    <option>Analgesik & Antipiretik</option>
+                                    <option>Antibiotik</option>
+                                    <option>Antihistamin</option>
+                                    <option>Lambung & Antasida</option>
+                                    <option>Sirup & Batuk</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Nama Lengkap Obat</label>
+                            <input type="text" class="form-control rounded-pill px-3" placeholder="Contoh: Asam Mefenamat 500mg" required>
+                        </div>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">Bentuk Sediaan</label>
+                                <select class="form-select rounded-pill px-3" required>
+                                    <option>Tablet</option>
+                                    <option>Kapsul</option>
+                                    <option>Kaplet</option>
+                                    <option>Sirup</option>
+                                    <option>Salep / Krim</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">Satuan Terkecil</label>
+                                <input type="text" class="form-control rounded-pill px-3" placeholder="Strip / Botol" required>
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mb-4">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">Harga Jual Kasir (Rp)</label>
+                                <input type="number" class="form-control rounded-pill px-3" placeholder="Rp eceran" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold text-warning-emphasis">Batas Alert Stok Tipis</label>
+                                <input type="number" class="form-control rounded-pill px-3" placeholder="Min. unit" value="5" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark w-100 py-2 rounded-pill fw-bold" style="background: var(--brand-teal); border: none;">
+                            Simpan ke Master Database
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: ATUR AMBANG STOK ALERT -->
+    <div class="modal fade" id="modalThreshold" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content rounded-4 p-3 border-0 shadow">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h6 class="modal-title fw-bold" style="color: var(--text-heading);"><i class="bi bi-sliders text-teal me-2" style="color: var(--brand-teal);"></i>Atur Ambang Batas</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="fw-bold small" id="editObatNama">-</div>
+                    <small class="text-muted d-block mb-3" id="editObatKode">-</small>
+                    
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Ambang Minimum Alert</label>
+                        <input type="number" class="form-control rounded-pill px-3" id="inputThresholdVal" min="1">
+                        <small class="text-muted" style="font-size: 0.7rem;">Sistem akan memberi alert merah jika stok di bawah angka ini.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Harga Jual Eceran (Rp)</label>
+                        <input type="number" class="form-control rounded-pill px-3" id="inputHargaVal">
+                    </div>
+
+                    <button class="btn btn-dark w-100 rounded-pill py-2 fw-bold" style="background: var(--brand-teal); border: none;" onclick="simpanThreshold()">
+                        Perbarui Pengaturan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function editThreshold(kode, nama, minStok, harga) {
+            document.getElementById('editObatKode').innerText = kode;
+            document.getElementById('editObatNama').innerText = nama;
+            document.getElementById('inputThresholdVal').value = minStok;
+            document.getElementById('inputHargaVal').value = harga;
+            new bootstrap.Modal(document.getElementById('modalThreshold')).show();
+        }
+
+        function simpanThreshold() {
+            alert('Pengaturan ambang batas stok dan harga jual berhasil diperbarui!');
+            bootstrap.Modal.getInstance(document.getElementById('modalThreshold')).hide();
+        }
+
+        function simpanMasterObat(e) {
+            e.preventDefault();
+            alert('Master obat baru berhasil ditambahkan! Anda sekarang dapat mencatat nomor batch fisiknya di menu Penerimaan Batch.');
+            bootstrap.Modal.getInstance(document.getElementById('modalTambahObat')).hide();
+        }
+
+        function filterKatalog(val) {
+            const rows = document.querySelectorAll('#tableKatalogBody tr');
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(val.toLowerCase()) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

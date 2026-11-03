@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Stok & Lokasi Rak - PharmaSentinel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- 1. DYNAMIC ISLAND KASIR -->
+    <nav class="dynamic-island-nav" title="Dekatkan kursor untuk membuka menu navigasi">
+        <a href="index.html" class="island-brand">
+            <i class="bi bi-capsule-pill"></i>
+            <span>PharmaSentinel</span>
+        </a>
+        <div class="island-pulse-dot"></div>
+
+        <div class="island-collapsible-content">
+            <ul class="island-menu">
+                <li>
+                    <a href="kasir-pos.html" class="island-link">
+                        <i class="bi bi-cart3"></i> Kasir POS
+                    </a>
+                </li>
+                <li>
+                    <a href="kasir-riwayat.html" class="island-link">
+                        <i class="bi bi-receipt"></i> Riwayat Shift
+                    </a>
+                </li>
+                <li>
+                    <a href="kasir-stok.html" class="island-link active">
+                        <i class="bi bi-search"></i> Cek Stok
+                    </a>
+                </li>
+            </ul>
+
+            <div class="island-user">
+                <span class="badge badge-role" style="background: var(--brand-teal-light); color: var(--brand-teal);">KASIR</span>
+                <span class="island-user-name">Denna A. (Kelompok 6)</span>
+                <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. WORKSPACE CEK STOK & LOKASI RAK -->
+    <div class="workspace-wrapper" style="margin-top: 95px;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold m-0" style="color: var(--text-heading);">Informasi Ketersediaan & Lokasi Rak</h3>
+                <p class="small m-0" style="color: var(--text-muted);">Pencarian cepat stok etalase dan titik rak fisik obat untuk melayani pertanyaan pasien di meja depan.</p>
+            </div>
+            <a href="kasir-pos.html" class="btn btn-dark rounded-pill px-4 fw-bold btn-sm shadow-sm" style="background: var(--brand-teal); border: none;">
+                <i class="bi bi-cart-plus me-1"></i> Buka Meja Kasir POS
+            </a>
+        </div>
+
+        <!-- SEARCH BAR & FILTER -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
+            <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" class="form-control border-start-0" placeholder="Ketik nama obat, khasiat, atau lokasi rak..." oninput="filterStok(this.value)">
+            </div>
+        </div>
+
+        <!-- TABEL READ-ONLY STOK KASIR -->
+        <div class="card border-0 shadow-sm rounded-4 p-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold m-0" style="color: var(--text-heading);"><i class="bi bi-box text-teal me-2" style="color: var(--brand-teal);"></i>Daftar Ketersediaan Stok Aktif</h6>
+                <span class="badge bg-light text-muted border rounded-pill px-2">Data Real-Time</span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr style="font-size: 0.76rem; text-transform: uppercase;">
+                            <th>Kode & Nama Obat</th>
+                            <th>Bentuk Sediaan</th>
+                            <th>Lokasi Rak Fisik</th>
+                            <th>Harga Jual Konsumen</th>
+                            <th>Status Ketersediaan</th>
+                            <th>Batch Prioritas FEFO</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableStokBody" style="font-size: 0.88rem;">
+                        <tr>
+                            <td>
+                                <code>OBT-001</code>
+                                <div class="fw-bold mt-1" style="color: var(--text-heading);">Paracetamol 500mg</div>
+                            </td>
+                            <td><span class="badge bg-light text-dark border">Tablet</span></td>
+                            <td><span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-geo-alt me-1"></i>Rak A - Baris 2</span></td>
+                            <td><strong style="color: var(--brand-teal);">Rp 8.000</strong> <small class="text-muted">/ Strip</small></td>
+                            <td><span class="badge bg-success-subtle text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Tersedia (13 Strip)</span></td>
+                            <td style="color: var(--text-muted); font-size: 0.8rem;">
+                                BTH-PCT-A1 (ED: 15 Nov 2026)
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <code>OBT-002</code>
+                                <div class="fw-bold mt-1" style="color: var(--text-heading);">Amoxicillin 500mg</div>
+                            </td>
+                            <td><span class="badge bg-light text-dark border">Kapsul</span></td>
+                            <td><span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-geo-alt me-1"></i>Rak Antibiotik - B1</span></td>
+                            <td><strong style="color: var(--brand-teal);">Rp 12.000</strong> <small class="text-muted">/ Strip</small></td>
+                            <td><span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2 py-1"><i class="bi bi-exclamation-triangle me-1"></i>Sisa 4 Strip (Tipis)</span></td>
+                            <td style="color: var(--danger-red); font-size: 0.8rem; font-weight: 700;">
+                                BTH-AMX-09 (ED: 05 Nov 2026)
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <code>OBT-004</code>
+                                <div class="fw-bold mt-1" style="color: var(--text-heading);">OBH Tropica Plus 100ml</div>
+                            </td>
+                            <td><span class="badge bg-light text-dark border">Sirup</span></td>
+                            <td><span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-geo-alt me-1"></i>Etalase Sirup - E3</span></td>
+                            <td><strong style="color: var(--brand-teal);">Rp 24.000</strong> <small class="text-muted">/ Botol</small></td>
+                            <td><span class="badge bg-success-subtle text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Tersedia (8 Botol)</span></td>
+                            <td style="color: var(--text-muted); font-size: 0.8rem;">
+                                BTH-OBH-01 (ED: 18 Mei 2027)
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <code>OBT-006</code>
+                                <div class="fw-bold mt-1" style="color: var(--text-heading);">Antasida Doen Suspensi</div>
+                            </td>
+                            <td><span class="badge bg-light text-dark border">Suspensi</span></td>
+                            <td><span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-geo-alt me-1"></i>Rak Lambung - C2</span></td>
+                            <td><strong style="color: var(--brand-teal);">Rp 11.000</strong> <small class="text-muted">/ Botol</small></td>
+                            <td><span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2 py-1"><i class="bi bi-exclamation-triangle me-1"></i>Sisa 3 Botol (Tipis)</span></td>
+                            <td style="color: var(--text-muted); font-size: 0.8rem;">
+                                BTH-ATD-03 (ED: 02 Des 2026)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filterStok(query) {
+            const rows = document.querySelectorAll('#tableStokBody tr');
+            rows.forEach(r => {
+                const text = r.innerText.toLowerCase();
+                r.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>
