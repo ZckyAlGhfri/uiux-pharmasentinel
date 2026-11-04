@@ -1,10 +1,10 @@
 /* ==========================================================================
-   THEME: EDITORIAL LIGHT COCKPIT + IPHONE DYNAMIC ISLAND MORPH
+   THEME: EDITORIAL LIGHT COCKPIT + ADVANCED DYNAMIC ISLAND & SATELLITE LOCK
    ========================================================================== */
 :root {
     --bg-app: #f1f5f9;
     --surface-card: #ffffff;
-    --surface-glass-dark: rgba(15, 23, 42, 0.95);
+    --surface-glass-dark: rgba(15, 23, 42, 0.94);
 
     --border-subtle: #e2e8f0;
     --border-strong: #cbd5e1;
@@ -14,6 +14,7 @@
     --brand-teal: #0d9488;
     --brand-teal-light: #ccfbf1;
     --brand-teal-dark: #0f766e;
+    --brand-teal-glow: rgba(13, 148, 136, 0.35);
 
     --danger-red: #e11d48;
     --danger-red-light: #ffe4e6;
@@ -31,8 +32,9 @@
     --radius-card: 20px;
     --radius-item: 16px;
 
-    /* Kurva Pegas Dynamic Island Apple */
-    --island-spring: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    /* KURVA ANIMASI DIPERHALUS & DIPERLAMBAT */
+    --island-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --island-speed: 0.65s;
 }
 
 body {
@@ -46,13 +48,73 @@ body {
 }
 
 /* ==========================================================================
-   PERBAIKAN DYNAMIC ISLAND: LEBAR DINAMIS & ANTI-CLIPPING
+   DYNAMIC ISLAND CONTAINER & FLOATING SATELLITE LOCK (DESKTOP)
    ========================================================================== */
-.dynamic-island-nav {
+.island-outer-wrapper {
     position: fixed;
     top: 16px;
     left: 50%;
     transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1100;
+}
+
+/* TOMBOL GEMBOK SATELIT (MUNCUL KE KIRI SAAT HOVER) */
+.island-lock-satellite {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--surface-glass-dark);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.4);
+    
+    /* State Idle: Sembunyi di balik kapsul */
+    opacity: 0;
+    transform: translateX(45px) scale(0.4);
+    pointer-events: none;
+    transition: all var(--island-speed) var(--island-ease);
+}
+
+/* MUNCUL MELUNCUR KETIKA NAV DIDEKATI ATAU TERKUNCI */
+.island-outer-wrapper:hover .island-lock-satellite,
+.island-outer-wrapper.is-expanded .island-lock-satellite,
+.island-outer-wrapper.is-locked .island-lock-satellite {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    pointer-events: auto;
+}
+
+/* STATUS TERKUNCI */
+.island-lock-satellite.locked {
+    background: var(--brand-teal);
+    border-color: #2dd4bf;
+    color: #ffffff;
+    box-shadow: 0 0 16px var(--brand-teal-glow), 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* EFEK MORPH IKON GEMBOK (AFTER EFFECTS SPRING BOUNCE) */
+.lock-morph-spring {
+    animation: lockMorph 0.5s var(--island-ease) forwards;
+}
+
+@keyframes lockMorph {
+    0% { transform: scale(1) rotate(0deg); }
+    35% { transform: scale(1.4) rotate(-18deg); }
+    70% { transform: scale(0.85) rotate(8deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+/* KAPSUL DYNAMIC ISLAND UTAMA */
+.dynamic-island-nav {
     background: var(--surface-glass-dark);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
@@ -61,20 +123,28 @@ body {
     padding: 6px 14px;
     display: flex;
     align-items: center;
-    z-index: 1000;
     box-shadow: 0 16px 36px -6px rgba(15, 23, 42, 0.35);
-    transition: var(--island-spring);
+    transition: all var(--island-speed) var(--island-ease);
     cursor: pointer;
     overflow: hidden;
-    max-width: 210px; /* Ukuran compact saat idle */
+    max-width: 210px; /* Ukuran Compact */
 }
 
-/* KETIKA DI-HOVER: MELEBAR LEGA AGAR SEMUA MENU & USER TERLIHAT */
-.dynamic-island-nav:hover {
-    max-width: 1100px !important; /* DITINGKATKAN: Muat untuk seluruh menu admin */
+/* KONDISI MELEBAR (HOVER / IS-EXPANDED / IS-LOCKED) */
+.island-outer-wrapper:hover .dynamic-island-nav,
+.island-outer-wrapper.is-expanded .dynamic-island-nav,
+.island-outer-wrapper.is-locked .dynamic-island-nav {
+    max-width: 1100px;
     padding: 6px 20px;
     box-shadow: 0 20px 45px -4px rgba(13, 148, 136, 0.25), 0 16px 36px -6px rgba(15, 23, 42, 0.4);
     border-color: rgba(45, 212, 191, 0.4);
+}
+
+.island-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
 }
 
 .island-brand {
@@ -90,6 +160,11 @@ body {
     flex-shrink: 0;
 }
 
+.island-brand i {
+    color: #2dd4bf;
+    font-size: 1.2rem;
+}
+
 .island-pulse-dot {
     width: 8px;
     height: 8px;
@@ -97,11 +172,13 @@ body {
     border-radius: 50%;
     margin-left: 8px;
     box-shadow: 0 0 8px #10b981;
-    transition: var(--island-spring);
+    transition: all var(--island-speed) var(--island-ease);
     flex-shrink: 0;
 }
 
-.dynamic-island-nav:hover .island-pulse-dot {
+.island-outer-wrapper:hover .island-pulse-dot,
+.island-outer-wrapper.is-expanded .island-pulse-dot,
+.island-outer-wrapper.is-locked .island-pulse-dot {
     display: none;
 }
 
@@ -112,14 +189,16 @@ body {
     opacity: 0;
     max-width: 0;
     overflow: hidden;
-    transition: var(--island-spring);
+    transition: all var(--island-speed) var(--island-ease);
     white-space: nowrap;
     pointer-events: none;
 }
 
-.dynamic-island-nav:hover .island-collapsible-content {
+.island-outer-wrapper:hover .island-collapsible-content,
+.island-outer-wrapper.is-expanded .island-collapsible-content,
+.island-outer-wrapper.is-locked .island-collapsible-content {
     opacity: 1;
-    max-width: 900px !important; /* DITINGKATKAN: Mencegah user terpotong */
+    max-width: 900px;
     pointer-events: auto;
     margin-left: 10px;
     padding-left: 10px;
@@ -162,14 +241,13 @@ body {
     font-weight: 700;
 }
 
-/* USER PROFILE: DIKUNCI AGAR TIDAK BISA MENYUSUT */
 .island-user {
     padding-left: 10px;
     border-left: 1px solid rgba(255, 255, 255, 0.15);
     display: flex;
     align-items: center;
     gap: 8px;
-    flex-shrink: 0 !important; /* DIKUNCI: Wajib selalu tampil utuh */
+    flex-shrink: 0 !important;
 }
 
 .island-user-name {
@@ -189,18 +267,8 @@ body {
     flex-shrink: 0;
 }
 
-/* FIX KONTRAS SEMUA TOMBOL GELAP (BTN-DARK & AUDIT REPORT) */
-.btn-dark, .btn-dark *, button[class*="btn-dark"] * {
-    color: #ffffff !important;
-}
-
-.btn-dark:hover {
-    background-color: #1e293b !important;
-    color: #ffffff !important;
-}
-
 /* ==========================================================================
-   LAYOUT KOKPIT UMUM & KOMPONEN
+   LAYOUT, COMPONENTS, & RESPONSIVE TWEAKS
    ========================================================================== */
 .top-cockpit-bar {
     max-width: 1400px;
@@ -390,75 +458,151 @@ body {
     gap: 4px;
 }
 
-.bento-admin-stat {
-    background: var(--surface-card);
-    border: 1.5px solid var(--border-subtle);
-    border-radius: var(--radius-card);
-    padding: 22px;
-    box-shadow: var(--shadow-card);
-    height: 100%;
-    transition: all 0.25s ease;
+/* ==========================================================================
+   PAGINATION MODERN HIGH-CONTRAST (INSTANT ZERO-RELOAD)
+   ========================================================================== */
+.pagination-cockpit {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.bento-admin-stat:hover {
-    transform: translateY(-3px);
+.page-pill-btn {
+    min-width: 36px;
+    height: 36px;
+    border-radius: var(--radius-pill);
+    background: #ffffff;
+    border: 1px solid var(--border-strong);
+    color: var(--text-heading);
+    font-size: 0.82rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0 10px;
+}
+
+.page-pill-btn:hover:not(:disabled) {
     border-color: var(--brand-teal);
-    box-shadow: var(--shadow-hover);
+    color: var(--brand-teal);
+    background: var(--brand-teal-light);
 }
 
-.radar-timeline-track {
-    background: #e2e8f0;
-    height: 8px;
-    border-radius: var(--radius-pill);
-    position: relative;
-    margin: 24px 0 16px 0;
-}
-
-.radar-timeline-fill {
-    background: linear-gradient(90deg, #e11d48 0%, #f59e0b 50%, #059669 100%);
-    height: 100%;
-    border-radius: var(--radius-pill);
-    width: 100%;
-}
-
-h1, h2, h3, h4, h5, h6, .fw-bold {
-    color: var(--text-heading) !important;
-}
-
-.text-muted {
-    color: var(--text-muted) !important;
-}
-
-.table {
-    color: var(--text-heading) !important;
-}
-
-.table thead th {
-    background-color: #f8fafc !important;
-    color: var(--text-muted) !important;
-    font-weight: 700;
-    border-bottom: 2px solid var(--border-subtle);
-}
-
-.table tbody tr:hover td {
-    background-color: #f8fafc !important;
-}
-
-.form-control, .form-select {
-    background-color: #ffffff !important;
-    border-color: var(--border-strong) !important;
-    color: var(--text-heading) !important;
-}
-
-.form-control:focus, .form-select:focus {
+.page-pill-btn.active {
+    background: var(--brand-teal) !important;
     border-color: var(--brand-teal) !important;
-    box-shadow: 0 0 0 4px var(--brand-teal-light) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px var(--brand-teal-glow);
 }
 
-code {
-    color: var(--brand-teal-dark) !important;
-    background: var(--brand-teal-light) !important;
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-weight: 700;
+.page-pill-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (MOBILE & TABLET ADJUSTMENTS)
+   ========================================================================== */
+.island-mobile-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1050;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.island-mobile-backdrop.active {
+    display: block;
+    opacity: 1;
+}
+
+@media (max-width: 991.98px) {
+    /* SATELLITE LOCK TIDAK AKTIF DI MOBILE */
+    .island-lock-satellite {
+        display: none !important;
+    }
+
+    .island-outer-wrapper {
+        width: calc(100% - 32px);
+        max-width: 450px;
+    }
+
+    .dynamic-island-nav {
+        width: 100%;
+        max-width: 100% !important;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px 16px !important;
+        border-radius: 20px !important;
+    }
+
+    .island-brand-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* KONTEN MENU MEKAR VERTIKAL DI MOBILE */
+    .island-collapsible-content {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        max-width: 100% !important;
+        opacity: 1;
+        margin: 12px 0 0 0 !important;
+        padding: 12px 0 0 0 !important;
+        border-left: none !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .island-outer-wrapper.is-expanded .island-collapsible-content {
+        display: flex;
+    }
+
+    .island-menu {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+    }
+
+    .island-link {
+        padding: 10px 14px;
+        justify-content: flex-start;
+    }
+
+    .island-user {
+        border-left: none !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 10px 0 0 0;
+        justify-content: space-between;
+    }
+
+    /* KASIR COCKPIT MENJADI 1 KOLOM */
+    .cockpit-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .right-companion-pane {
+        position: static;
+        min-height: auto;
+    }
+}
+
+/* FIX WARNA STANDAR */
+h1, h2, h3, h4, h5, h6, .fw-bold { color: var(--text-heading) !important; }
+.text-muted { color: var(--text-muted) !important; }
+.btn-dark, .btn-dark * { color: #ffffff !important; }
