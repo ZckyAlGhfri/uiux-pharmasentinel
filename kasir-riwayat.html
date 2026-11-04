@@ -23,46 +23,55 @@
 <body>
 
     <!-- 1. DYNAMIC ISLAND KASIR -->
-    <nav class="dynamic-island-nav" title="Dekatkan kursor untuk membuka menu navigasi">
-        <a href="index.html" class="island-brand">
-            <i class="bi bi-capsule-pill"></i>
-            <span>PharmaSentinel</span>
-        </a>
-        <div class="island-pulse-dot"></div>
+    <!-- 1. DYNAMIC ISLAND WRAPPER + SATELLITE LOCK -->
+    <div class="island-outer-wrapper">
+        <button class="island-lock-satellite" id="btnNavLock" title="Kunci Tampilan Navbar">
+            <i class="bi bi-unlock-fill lock-icon"></i>
+        </button>
 
-        <div class="island-collapsible-content">
-            <ul class="island-menu">
-                <li>
-                    <a href="kasir-pos.html" class="island-link">
-                        <i class="bi bi-cart3"></i> Kasir POS
-                    </a>
-                </li>
-                <li>
-                    <a href="kasir-riwayat.html" class="island-link active">
-                        <i class="bi bi-receipt"></i> Riwayat Shift
-                    </a>
-                </li>
-                <li>
-                    <a href="kasir-stok.html" class="island-link">
-                        <i class="bi bi-search"></i> Cek Stok
-                    </a>
-                </li>
-            </ul>
-
-            <div class="island-user">
-                <span class="badge badge-role" style="background: var(--brand-teal-light); color: var(--brand-teal);">KASIR</span>
-                <span class="island-user-name">Kelompok 6</span>
-                <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+        <nav class="dynamic-island-nav">
+            <div class="island-brand-row">
+                <a href="index.html" class="island-brand">
+                    <i class="bi bi-capsule-pill"></i>
+                    <span>PharmaSentinel</span>
+                </a>
+                <div class="island-pulse-dot" title="Sistem Aktif"></div>
             </div>
-        </div>
-    </nav>
+
+            <div class="island-collapsible-content">
+                <ul class="island-menu">
+                    <li>
+                        <a href="kasir-pos.html" class="island-link">
+                            <i class="bi bi-cart3"></i> Kasir POS
+                        </a>
+                    </li>
+                    <li>
+                        <a href="kasir-riwayat.html" class="island-link active">
+                            <i class="bi bi-receipt"></i> Riwayat Shift
+                        </a>
+                    </li>
+                    <li>
+                        <a href="kasir-stok.html" class="island-link">
+                            <i class="bi bi-search"></i> Cek Stok
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="island-user">
+                    <span class="badge badge-role" style="background: var(--brand-teal-light); color: var(--brand-teal);">KASIR</span>
+                    <span class="island-user-name">Kelompok 6</span>
+                    <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+                </div>
+            </div>
+        </nav>
+    </div>
 
     <!-- 2. WORKSPACE RIWAYAT SHIFT -->
     <div class="workspace-wrapper" style="margin-top: 95px;">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h3 class="fw-bold m-0" style="color: var(--text-heading);">Riwayat Transaksi & Tutup Shift</h3>
-                <p class="small m-0" style="color: var(--text-muted);">Daftar seluruh nota penjualan yang diterbitkan oleh kasir Denna Agustin pada shift aktif hari ini.</p>
+                <p class="small m-0" style="color: var(--text-muted);">Daftar seluruh nota penjualan yang diterbitkan oleh kasir Nazla Khoerunisa pada shift aktif hari ini.</p>
             </div>
             <button class="btn btn-outline-dark rounded-pill px-3 fw-bold btn-sm shadow-sm" onclick="alert('Proses Tutup Shift: Rekap setoran kasir berhasil dicetak!')">
                 <i class="bi bi-lock me-1"></i> Rekap Tutup Shift
@@ -179,6 +188,10 @@
                     </tbody>
                 </table>
             </div>
+            <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                <small class="text-muted fw-bold" id="riwayatPaginationInfo">Memuat...</small>
+                <ul class="pagination-cockpit m-0" id="riwayatPaginationControls"></ul>
+            </div>
         </div>
     </div>
 
@@ -198,7 +211,7 @@
                         <small>Telp: (0264) 822-1900</small>
                         <div class="border-top border-bottom my-2 py-1 text-start" style="font-size: 0.72rem;">
                             No. Nota : <span id="notaNo">-</span><br>
-                            Kasir    : Denna A. (Shift 2)<br>
+                            Kasir    :  A. (Shift 2)<br>
                             Waktu    : 28/10/2026 20:15
                         </div>
 
@@ -235,16 +248,99 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/navbar.js"></script>
     <script>
+        // DATASET SIMULASI 10 NOTA TRANSAKSI
+        let trxList = [
+            { no: "#INV-20261104-018", time: "20:15 WIB", item: "Paracetamol 500mg (5 Strip)", detail: "3x BTH-PCT-A1 (ED: 15 Nov 26) + 2x BTH-PCT-A2 (ED: 20 Jan 27)", isSplit: true, method: "QRIS", total: "Rp 40.000" },
+            { no: "#INV-20261104-017", time: "19:42 WIB", item: "Amoxicillin 500mg (2 Strip)", detail: "2x BTH-AMX-09 (ED: 05 Nov 26)", isSplit: false, method: "Tunai", total: "Rp 24.000" },
+            { no: "#INV-20261104-016", time: "18:50 WIB", item: "OBH Tropica Plus (1 Botol)", detail: "1x BTH-OBH-01 (ED: 18 Mei 27)", isSplit: false, method: "Tunai", total: "Rp 24.000" },
+            { no: "#INV-20261104-015", time: "17:30 WIB", item: "Cetirizine 10mg (3 Strip)", detail: "3x BTH-CTZ-77 (ED: 10 Des 26)", isSplit: false, method: "QRIS", total: "Rp 19.500" },
+            { no: "#INV-20261104-014", time: "16:20 WIB", item: "Ibuprofen 400mg (4 Strip)", detail: "4x BTH-IBU-12 (ED: 22 Nov 26)", isSplit: false, method: "Tunai", total: "Rp 38.000" },
+            { no: "#INV-20261104-013", time: "15:45 WIB", item: "Antasida Doen (2 Botol)", detail: "2x BTH-ATD-03 (ED: 02 Des 26)", isSplit: false, method: "Tunai", total: "Rp 22.000" },
+            { no: "#INV-20261104-012", time: "15:10 WIB", item: "Cefixime 100mg (1 Strip)", detail: "1x BTH-CFX-88 (ED: 15 Jan 27)", isSplit: false, method: "QRIS", total: "Rp 32.000" },
+            { no: "#INV-20261104-011", time: "14:40 WIB", item: "Vitamin C 500mg (2 Botol)", detail: "2x BTH-VTC-90 (ED: 10 Mar 27)", isSplit: false, method: "Tunai", total: "Rp 18.000" },
+            { no: "#INV-20261104-010", time: "14:25 WIB", item: "Omeprazole 20mg (1 Strip)", detail: "1x BTH-OMP-04 (ED: 14 Des 26)", isSplit: false, method: "Tunai", total: "Rp 18.000" },
+            { no: "#INV-20261104-009", time: "14:05 WIB", item: "Dexamethasone (2 Strip)", detail: "2x BTH-DXM-01 (ED: 08 Des 26)", isSplit: false, method: "Tunai", total: "Rp 10.000" }
+        ];
+
+        let trxPage = 1;
+        const TRX_PAGE_SIZE = 5; // 5 Struk per halaman
+
+        function renderTrxTable() {
+            const tbody = document.querySelector(".table tbody");
+            tbody.innerHTML = "";
+
+            const total = trxList.length;
+            const totalPages = Math.ceil(total / TRX_PAGE_SIZE) || 1;
+            trxPage = Math.max(1, Math.min(trxPage, totalPages));
+
+            const start = (trxPage - 1) * TRX_PAGE_SIZE;
+            const end = Math.min(start + TRX_PAGE_SIZE, total);
+            const pageData = trxList.slice(start, end);
+
+            pageData.forEach(t => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><code>${t.no}</code></td>
+                    <td style="color: var(--text-muted);">${t.time}</td>
+                    <td>
+                        <strong style="color: var(--text-heading);">${t.item}</strong>
+                        <div class="small" style="color: var(--text-muted);">
+                            <i class="bi bi-arrow-return-right text-success"></i> ${t.detail}
+                            ${t.isSplit ? '<span class="badge bg-warning text-dark ms-1" style="font-size: 0.65rem;">SPLIT BATCH</span>' : '<span class="badge bg-light text-secondary ms-1" style="font-size: 0.65rem;">1 Batch</span>'}
+                        </div>
+                    </td>
+                    <td><span class="badge ${t.method === 'QRIS' ? 'bg-success-subtle text-success border' : 'bg-light text-dark border'}">${t.method}</span></td>
+                    <td><strong style="color: var(--text-heading);">${t.total}</strong></td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-dark rounded-pill px-3" onclick="openReprintModal('${t.no}', '${t.item}', '${t.total}', '${t.method}', '${t.detail}')">
+                            <i class="bi bi-printer me-1"></i> Cetak Ulang
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Pagination Controls
+            document.getElementById("riwayatPaginationInfo").innerText = `Menampilkan ${start + 1}-${end} dari ${total} transaksi shift`;
+            const controls = document.getElementById("riwayatPaginationControls");
+            controls.innerHTML = "";
+
+            const prev = document.createElement("button");
+            prev.className = "page-pill-btn";
+            prev.innerHTML = '<i class="bi bi-chevron-left"></i>';
+            prev.disabled = (trxPage === 1);
+            prev.onclick = () => { trxPage--; renderTrxTable(); };
+            controls.appendChild(prev);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement("button");
+                btn.className = `page-pill-btn ${i === trxPage ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => { trxPage = i; renderTrxTable(); };
+                controls.appendChild(btn);
+            }
+
+            const next = document.createElement("button");
+            next.className = "page-pill-btn";
+            next.innerHTML = '<i class="bi bi-chevron-right"></i>';
+            next.disabled = (trxPage === totalPages);
+            next.onclick = () => { trxPage++; renderTrxTable(); };
+            controls.appendChild(next);
+        }
+
         function openReprintModal(faktur, item, total, metode, batch) {
             document.getElementById('notaNo').innerText = faktur;
             document.getElementById('notaItem').innerText = item;
             document.getElementById('notaTotal').innerText = total;
             document.getElementById('notaMetode').innerText = metode;
             document.getElementById('notaBatch').innerText = 'Alokasi FEFO: ' + batch;
-
             new bootstrap.Modal(document.getElementById('modalReprint')).show();
         }
+
+        renderTrxTable();
     </script>
 </body>
 </html>

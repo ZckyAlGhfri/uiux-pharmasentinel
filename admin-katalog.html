@@ -11,45 +11,53 @@
 </head>
 <body>
 
-    <!-- 1. DYNAMIC ISLAND NAV (ADMIN GUDANG - FULL ACTIVE) -->
-    <nav class="dynamic-island-nav" title="Dekatkan kursor untuk membuka menu navigasi">
-        <a href="admin-dashboard.html" class="island-brand">
-            <i class="bi bi-shield-check"></i>
-            <span>PharmaSentinel</span>
-        </a>
-        <div class="island-pulse-dot"></div>
+    <!-- 1. DYNAMIC ISLAND WRAPPER + SATELLITE LOCK -->
+    <div class="island-outer-wrapper">
+        <button class="island-lock-satellite" id="btnNavLock" title="Kunci Tampilan Navbar">
+            <i class="bi bi-unlock-fill lock-icon"></i>
+        </button>
 
-        <div class="island-collapsible-content">
-            <ul class="island-menu">
-                <li>
-                    <a href="admin-dashboard.html" class="island-link">
-                        <i class="bi bi-radar"></i> Radar & Telemetri
-                    </a>
-                </li>
-                <li>
-                    <a href="admin-batch.html" class="island-link">
-                        <i class="bi bi-box-seam"></i> Penerimaan Batch
-                    </a>
-                </li>
-                <li>
-                    <a href="admin-karantina.html" class="island-link">
-                        <i class="bi bi-shield-slash"></i> Karantina ED
-                    </a>
-                </li>
-                <li>
-                    <a href="admin-katalog.html" class="island-link active">
-                        <i class="bi bi-database"></i> Master Katalog
-                    </a>
-                </li>
-            </ul>
-
-            <div class="island-user">
-                <span class="badge badge-role" style="background: #e0e7ff; color: #4338ca;">ADMIN</span>
-                <span class="island-user-name">Kelompok 6</span>
-                <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+        <nav class="dynamic-island-nav">
+            <div class="island-brand-row">
+                <a href="admin-dashboard.html" class="island-brand">
+                    <i class="bi bi-shield-check"></i>
+                    <span>PharmaSentinel</span>
+                </a>
+                <div class="island-pulse-dot" title="Sistem Aktif"></div>
             </div>
-        </div>
-    </nav>
+
+            <div class="island-collapsible-content">
+                <ul class="island-menu">
+                    <li>
+                        <a href="admin-dashboard.html" class="island-link">
+                            <i class="bi bi-radar"></i> Radar & Telemetri
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-batch.html" class="island-link">
+                            <i class="bi bi-box-seam"></i> Penerimaan Batch
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-karantina.html" class="island-link">
+                            <i class="bi bi-shield-slash"></i> Karantina ED
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-katalog.html" class="island-link active">
+                            <i class="bi bi-database"></i> Master Katalog
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="island-user">
+                    <span class="badge badge-role" style="background: #e0e7ff; color: #4338ca;">ADMIN</span>
+                    <span class="island-user-name">M. Zacky (Lead)</span>
+                    <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+                </div>
+            </div>
+        </nav>
+    </div>
 
     <!-- 2. WORKSPACE MASTER KATALOG -->
     <div class="workspace-wrapper" style="margin-top: 95px;">
@@ -181,6 +189,10 @@
                     </tbody>
                 </table>
             </div>
+            <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                <small class="text-muted fw-bold" id="katalogPaginationInfo">Memuat...</small>
+                <ul class="pagination-cockpit m-0" id="katalogPaginationControls"></ul>
+            </div>
         </div>
     </div>
 
@@ -286,7 +298,102 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/navbar.js"></script>
     <script>
+        // DATASET MASTER KATALOG (12 DATA)
+        let katalogList = [
+            { code: "OBT-001", name: "Paracetamol 500mg", cat: "Analgesik", form: "Tablet", price: 8000, min: 5, stock: 13, unit: "Strip" },
+            { code: "OBT-002", name: "Amoxicillin 500mg", cat: "Antibiotik", form: "Kapsul", price: 12000, min: 5, stock: 4, unit: "Strip" },
+            { code: "OBT-003", name: "Cetirizine 10mg", cat: "Antihistamin", form: "Tablet", price: 6500, min: 10, stock: 25, unit: "Strip" },
+            { code: "OBT-004", name: "OBH Tropica Plus 100ml", cat: "Sirup", form: "Sirup", price: 24000, min: 3, stock: 8, unit: "Botol" },
+            { code: "OBT-005", name: "Ibuprofen 400mg", cat: "Analgesik", form: "Kaplet", price: 9500, min: 8, stock: 20, unit: "Strip" },
+            { code: "OBT-006", name: "Antasida Doen Suspensi", cat: "Lambung", form: "Suspensi", price: 11000, min: 5, stock: 3, unit: "Botol" },
+            { code: "OBT-007", name: "Cefixime 100mg", cat: "Antibiotik", form: "Kapsul", price: 32000, min: 5, stock: 6, unit: "Strip" },
+            { code: "OBT-008", name: "Dexamethasone 0.5mg", cat: "Kortikosteroid", form: "Tablet", price: 5000, min: 10, stock: 20, unit: "Strip" },
+            { code: "OBT-009", name: "Omeprazole 20mg", cat: "Lambung", form: "Kapsul", price: 18000, min: 5, stock: 12, unit: "Strip" },
+            { code: "OBT-010", name: "Vitamin C 500mg IPI", cat: "Vitamin", form: "Tablet", price: 9000, min: 10, stock: 30, unit: "Botol" },
+            { code: "OBT-011", name: "Loperamide 2mg", cat: "Saluran Cerna", form: "Tablet", price: 4500, min: 5, stock: 18, unit: "Strip" },
+            { code: "OBT-012", name: "Asam Mefenamat 500mg", cat: "Analgesik", form: "Kaplet", price: 8500, min: 5, stock: 14, unit: "Strip" }
+        ];
+
+        let katalogPage = 1;
+        let searchKeyword = "";
+        const KATALOG_PAGE_SIZE = 5;
+
+        function renderKatalogTable() {
+            const tbody = document.getElementById("tableKatalogBody");
+            tbody.innerHTML = "";
+
+            const filtered = katalogList.filter(k => 
+                k.name.toLowerCase().includes(searchKeyword.toLowerCase()) || 
+                k.code.toLowerCase().includes(searchKeyword.toLowerCase())
+            );
+
+            const total = filtered.length;
+            const totalPages = Math.ceil(total / KATALOG_PAGE_SIZE) || 1;
+            katalogPage = Math.max(1, Math.min(katalogPage, totalPages));
+
+            const start = (katalogPage - 1) * KATALOG_PAGE_SIZE;
+            const end = Math.min(start + KATALOG_PAGE_SIZE, total);
+            const pageData = filtered.slice(start, end);
+
+            pageData.forEach(item => {
+                const isLow = item.stock <= item.min;
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><code>${item.code}</code></td>
+                    <td><strong style="color: var(--text-heading);">${item.name}</strong></td>
+                    <td>
+                        <span class="badge bg-light text-dark border">${item.cat}</span>
+                        <span class="badge bg-secondary-subtle text-secondary">${item.form}</span>
+                    </td>
+                    <td><strong style="color: var(--brand-teal);">Rp ${item.price.toLocaleString('id-ID')}</strong> <small class="text-muted">/ ${item.unit}</small></td>
+                    <td><span class="badge ${isLow ? 'bg-warning-subtle text-warning-emphasis border' : 'bg-light text-dark border'}">Min: ${item.min} ${item.unit}</span></td>
+                    <td><strong style="color: ${isLow ? 'var(--danger-red)' : 'var(--text-heading)'};">${item.stock} ${item.unit}</strong> ${isLow ? '<small class="text-danger fw-bold">(Stok Tipis!)</small>' : '<small class="text-success">(Aman)</small>'}</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-dark rounded-pill px-3" onclick="editThreshold('${item.code}', '${item.name}', ${item.min}, ${item.price})">
+                            <i class="bi bi-sliders me-1"></i> Atur Ambang
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Controls
+            document.getElementById("katalogPaginationInfo").innerText = `Menampilkan ${total === 0 ? 0 : start + 1}-${end} dari ${total} SKU obat`;
+            const controls = document.getElementById("katalogPaginationControls");
+            controls.innerHTML = "";
+
+            const prev = document.createElement("button");
+            prev.className = "page-pill-btn";
+            prev.innerHTML = '<i class="bi bi-chevron-left"></i>';
+            prev.disabled = (katalogPage === 1);
+            prev.onclick = () => { katalogPage--; renderKatalogTable(); };
+            controls.appendChild(prev);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement("button");
+                btn.className = `page-pill-btn ${i === katalogPage ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => { katalogPage = i; renderKatalogTable(); };
+                controls.appendChild(btn);
+            }
+
+            const next = document.createElement("button");
+            next.className = "page-pill-btn";
+            next.innerHTML = '<i class="bi bi-chevron-right"></i>';
+            next.disabled = (katalogPage === totalPages);
+            next.onclick = () => { katalogPage++; renderKatalogTable(); };
+            controls.appendChild(next);
+        }
+
+        function filterKatalog(val) {
+            searchKeyword = val;
+            katalogPage = 1;
+            renderKatalogTable();
+        }
+
         function editThreshold(kode, nama, minStok, harga) {
             document.getElementById('editObatKode').innerText = kode;
             document.getElementById('editObatNama').innerText = nama;
@@ -302,17 +409,11 @@
 
         function simpanMasterObat(e) {
             e.preventDefault();
-            alert('Master obat baru berhasil ditambahkan! Anda sekarang dapat mencatat nomor batch fisiknya di menu Penerimaan Batch.');
+            alert('Master obat baru berhasil ditambahkan!');
             bootstrap.Modal.getInstance(document.getElementById('modalTambahObat')).hide();
         }
 
-        function filterKatalog(val) {
-            const rows = document.querySelectorAll('#tableKatalogBody tr');
-            rows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                row.style.display = text.includes(val.toLowerCase()) ? '' : 'none';
-            });
-        }
+        renderKatalogTable();
     </script>
 </body>
 </html>

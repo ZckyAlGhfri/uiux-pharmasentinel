@@ -50,45 +50,53 @@
 </head>
 <body>
 
-    <!-- 1. DYNAMIC ISLAND (SUDAH DIPERLEBAR & ANTI-CLIPPING) -->
-    <nav class="dynamic-island-nav" title="Dekatkan kursor untuk membuka menu navigasi">
-        <a href="admin-dashboard.html" class="island-brand">
-            <i class="bi bi-shield-check"></i>
-            <span>PharmaSentinel</span>
-        </a>
-        <div class="island-pulse-dot"></div>
+    <!-- 1. DYNAMIC ISLAND WRAPPER + SATELLITE LOCK -->
+    <div class="island-outer-wrapper">
+        <button class="island-lock-satellite" id="btnNavLock" title="Kunci Tampilan Navbar">
+            <i class="bi bi-unlock-fill lock-icon"></i>
+        </button>
 
-        <div class="island-collapsible-content">
-            <ul class="island-menu">
-                <li>
-                    <a href="admin-dashboard.html" class="island-link">
-                        <i class="bi bi-radar"></i> Radar & Telemetri
-                    </a>
-                </li>
-                <li>
-                    <a href="admin-batch.html" class="island-link">
-                        <i class="bi bi-box-seam"></i> Penerimaan Batch
-                    </a>
-                </li>
-                <li>
-                    <a href="admin-karantina.html" class="island-link active">
-                        <i class="bi bi-shield-slash"></i> Karantina ED
-                    </a>
-                </li>
-                <li>
-                    <a href="admin-katalog.html" class="island-link">
-                        <i class="bi bi-database"></i> Master Katalog
-                    </a>
-                </li>
-            </ul>
-
-            <div class="island-user">
-                <span class="badge badge-role" style="background: #e0e7ff; color: #4338ca;">ADMIN</span>
-                <span class="island-user-name">Kelompok</span>
-                <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+        <nav class="dynamic-island-nav">
+            <div class="island-brand-row">
+                <a href="admin-dashboard.html" class="island-brand">
+                    <i class="bi bi-shield-check"></i>
+                    <span>PharmaSentinel</span>
+                </a>
+                <div class="island-pulse-dot" title="Sistem Aktif"></div>
             </div>
-        </div>
-    </nav>
+
+            <div class="island-collapsible-content">
+                <ul class="island-menu">
+                    <li>
+                        <a href="admin-dashboard.html" class="island-link">
+                            <i class="bi bi-radar"></i> Radar & Telemetri
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-batch.html" class="island-link">
+                            <i class="bi bi-box-seam"></i> Penerimaan Batch
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-karantina.html" class="island-link active">
+                            <i class="bi bi-shield-slash"></i> Karantina ED
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-katalog.html" class="island-link">
+                            <i class="bi bi-database"></i> Master Katalog
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="island-user">
+                    <span class="badge badge-role" style="background: #e0e7ff; color: #4338ca;">ADMIN</span>
+                    <span class="island-user-name">M. Zacky (Lead)</span>
+                    <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+                </div>
+            </div>
+        </nav>
+    </div>
 
     <!-- 2. WORKSPACE KARANTINA -->
     <div class="workspace-wrapper" style="margin-top: 95px;">
@@ -244,6 +252,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/navbar.js"></script>
     <script>
         let selectedRowId = '';
 

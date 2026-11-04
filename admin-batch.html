@@ -11,45 +11,53 @@
 </head>
 <body>
 
-    <!-- 1. DYNAMIC ISLAND NAV -->
-    <nav class="dynamic-island-nav" title="Dekatkan kursor untuk membuka menu navigasi">
-        <a href="admin-dashboard.html" class="island-brand">
-            <i class="bi bi-shield-check"></i>
-            <span>PharmaSentinel</span>
-        </a>
-        <div class="island-pulse-dot"></div>
+    <!-- 1. DYNAMIC ISLAND WRAPPER + SATELLITE LOCK -->
+    <div class="island-outer-wrapper">
+        <button class="island-lock-satellite" id="btnNavLock" title="Kunci Tampilan Navbar">
+            <i class="bi bi-unlock-fill lock-icon"></i>
+        </button>
 
-        <div class="island-collapsible-content">
-            <ul class="island-menu">
-                <li>
-                    <a href="admin-dashboard.html" class="island-link">
-                        <i class="bi bi-radar"></i> Radar & Telemetri
-                    </a>
-                </li>
-                <li>
-                    <a href="admin-batch.html" class="island-link active">
-                        <i class="bi bi-box-seam"></i> Penerimaan Batch
-                    </a>
-                </li>
-                <li>
-                    <a href="admin-karantina.html" class="island-link">
-                        <i class="bi bi-shield-slash"></i> Karantina ED
-                    </a>
-                </li>
-                <li>
-                    <a href="admin-katalog.html" class="island-link">
-                        <i class="bi bi-database"></i> Master Katalog
-                    </a>
-                </li>
-            </ul>
-
-            <div class="island-user">
-                <span class="badge badge-role" style="background: #e0e7ff; color: #4338ca;">ADMIN</span>
-                <span class="island-user-name d-none d-md-inline">Kelompok 6</span>
-                <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+        <nav class="dynamic-island-nav">
+            <div class="island-brand-row">
+                <a href="admin-dashboard.html" class="island-brand">
+                    <i class="bi bi-shield-check"></i>
+                    <span>PharmaSentinel</span>
+                </a>
+                <div class="island-pulse-dot" title="Sistem Aktif"></div>
             </div>
-        </div>
-    </nav>
+
+            <div class="island-collapsible-content">
+                <ul class="island-menu">
+                    <li>
+                        <a href="admin-dashboard.html" class="island-link">
+                            <i class="bi bi-radar"></i> Radar & Telemetri
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-batch.html" class="island-link active">
+                            <i class="bi bi-box-seam"></i> Penerimaan Batch
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-karantina.html" class="island-link">
+                            <i class="bi bi-shield-slash"></i> Karantina ED
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-katalog.html" class="island-link">
+                            <i class="bi bi-database"></i> Master Katalog
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="island-user">
+                    <span class="badge badge-role" style="background: #e0e7ff; color: #4338ca;">ADMIN</span>
+                    <span class="island-user-name">M. Zacky (Lead)</span>
+                    <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+                </div>
+            </div>
+        </nav>
+    </div>
 
     <!-- 2. WORKSPACE PENERIMAAN BATCH -->
     <div class="workspace-wrapper" style="margin-top: 95px;">
@@ -177,44 +185,117 @@
                             </tbody>
                         </table>
                     </div>
+                     <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                        <small class="text-muted fw-bold" id="batchPaginationInfo">Memuat...</small>
+                        <ul class="pagination-cockpit m-0" id="batchPaginationControls"></ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="assets/js/navbar.js"></script>
     <script>
+        // DATASET SIMULASI BATCH LOG (12 DATA)
+        let batchLogs = [
+            { no: "BTH-PCT-A2", obat: "Paracetamol 500mg", pbf: "PT. Kimia Farma", ed: "20 Jan 2027", qty: "10 Strip", status: "Antrean 2 (Aman)", badge: "bg-success-subtle text-success" },
+            { no: "BTH-AMX-09", obat: "Amoxicillin 500mg", pbf: "PT. Kalbe Farma", ed: "05 Nov 2026", qty: "4 Strip", status: "Prioritas 1 Kasir", badge: "bg-danger-subtle text-danger" },
+            { no: "BTH-CTZ-77", obat: "Cetirizine 10mg", pbf: "PT. Kimia Farma", ed: "10 Des 2026", qty: "25 Strip", status: "Antrean 2", badge: "bg-warning-subtle text-warning-emphasis" },
+            { no: "BTH-OBH-01", obat: "OBH Tropica Plus", pbf: "PT. Dexa Medica", ed: "18 Mei 2027", qty: "8 Botol", status: "Antrean 2 (Aman)", badge: "bg-success-subtle text-success" },
+            { no: "BTH-IBU-12", obat: "Ibuprofen 400mg", pbf: "PT. Kalbe Farma", ed: "22 Nov 2026", qty: "5 Strip", status: "Prioritas 1 Kasir", badge: "bg-danger-subtle text-danger" },
+            { no: "BTH-ATD-03", obat: "Antasida Doen Suspensi", pbf: "PT. Mensa Bina Sukses", ed: "02 Des 2026", qty: "3 Botol", status: "Prioritas 1 Kasir", badge: "bg-danger-subtle text-danger" },
+            { no: "BTH-CFX-88", obat: "Cefixime 100mg", pbf: "PT. Kalbe Farma", ed: "15 Jan 2027", qty: "6 Strip", status: "Antrean 2", badge: "bg-success-subtle text-success" },
+            { no: "BTH-DXM-01", obat: "Dexamethasone 0.5mg", pbf: "PT. Kimia Farma", ed: "08 Des 2026", qty: "20 Strip", status: "Antrean 2", badge: "bg-warning-subtle text-warning-emphasis" },
+            { no: "BTH-OMP-04", obat: "Omeprazole 20mg", pbf: "PT. Dexa Medica", ed: "14 Des 2026", qty: "12 Strip", status: "Antrean 2", badge: "bg-warning-subtle text-warning-emphasis" },
+            { no: "BTH-VTC-90", obat: "Vitamin C 500mg IPI", pbf: "PT. Kimia Farma", ed: "10 Mar 2027", qty: "30 Botol", status: "Antrean 2 (Aman)", badge: "bg-success-subtle text-success" },
+            { no: "BTH-LPR-11", obat: "Loperamide 2mg", pbf: "PT. Mensa Bina Sukses", ed: "28 Nov 2026", qty: "18 Strip", status: "Prioritas 1 Kasir", badge: "bg-danger-subtle text-danger" },
+            { no: "BTH-ASM-02", obat: "Asam Mefenamat", pbf: "PT. Kalbe Farma", ed: "12 Jan 2027", qty: "14 Strip", status: "Antrean 2", badge: "bg-success-subtle text-success" }
+        ];
+
+        let currentBatchPage = 1;
+        const BATCH_PAGE_SIZE = 5; // 5 baris per halaman
+
+        function renderBatchTable() {
+            const tbody = document.getElementById("batchLogTableBody");
+            tbody.innerHTML = "";
+
+            const total = batchLogs.length;
+            const totalPages = Math.ceil(total / BATCH_PAGE_SIZE) || 1;
+            currentBatchPage = Math.max(1, Math.min(currentBatchPage, totalPages));
+
+            const start = (currentBatchPage - 1) * BATCH_PAGE_SIZE;
+            const end = Math.min(start + BATCH_PAGE_SIZE, total);
+            const pageData = batchLogs.slice(start, end);
+
+            pageData.forEach(item => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><code>${item.no}</code></td>
+                    <td><strong>${item.obat}</strong></td>
+                    <td>${item.pbf}</td>
+                    <td><span class="text-teal fw-bold" style="color: var(--brand-teal);">${item.ed}</span></td>
+                    <td><strong>${item.qty}</strong></td>
+                    <td><span class="badge ${item.badge} rounded-pill">${item.status}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Update UI Pagination
+            document.getElementById("batchPaginationInfo").innerText = `Menampilkan ${start + 1}-${end} dari ${total} batch log`;
+            const controls = document.getElementById("batchPaginationControls");
+            controls.innerHTML = "";
+
+            // Prev
+            const prev = document.createElement("button");
+            prev.className = "page-pill-btn";
+            prev.innerHTML = '<i class="bi bi-chevron-left"></i>';
+            prev.disabled = (currentBatchPage === 1);
+            prev.onclick = () => { currentBatchPage--; renderBatchTable(); };
+            controls.appendChild(prev);
+
+            // Numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement("button");
+                btn.className = `page-pill-btn ${i === currentBatchPage ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => { currentBatchPage = i; renderBatchTable(); };
+                controls.appendChild(btn);
+            }
+
+            // Next
+            const next = document.createElement("button");
+            next.className = "page-pill-btn";
+            next.innerHTML = '<i class="bi bi-chevron-right"></i>';
+            next.disabled = (currentBatchPage === totalPages);
+            next.onclick = () => { currentBatchPage++; renderBatchTable(); };
+            controls.appendChild(next);
+        }
+
         function handleBatchEntry(e) {
             e.preventDefault();
-            
             const obat = document.getElementById("inputObat").value;
             const batchNo = document.getElementById("inputBatchNo").value;
             const ed = document.getElementById("inputED").value;
             const qty = document.getElementById("inputQty").value;
             const pbf = document.getElementById("inputDistributor").value;
 
-            // VALIDASI FEFO: Tolak jika ED sudah lampau
-            const today = "2026-10-28";
-            if (ed <= today) {
-                alert("PELANGGARAN FEFO: Tanggal kedaluwarsa yang dimasukkan sama dengan atau lebih lampau dari hari ini! Obat kedaluwarsa ditolak masuk sistem.");
+            if (ed <= "2026-11-04") {
+                alert("PELANGGARAN FEFO: Tanggal kedaluwarsa sudah lampau! Ditolak masuk sistem.");
                 return;
             }
 
-            // Tambahkan baris baru ke tabel simulasi
-            const tbody = document.getElementById("batchLogTableBody");
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td><code>${batchNo}</code></td>
-                <td><strong>${obat}</strong></td>
-                <td>${pbf}</td>
-                <td><span class="text-teal fw-bold" style="color: var(--brand-teal);">${ed}</span></td>
-                <td><strong>${qty} Unit</strong></td>
-                <td><span class="badge bg-primary-subtle text-primary rounded-pill">Tercatat Aktif</span></td>
-            `;
-            tbody.insertBefore(tr, tbody.firstChild);
+            batchLogs.unshift({
+                no: batchNo, obat: obat, pbf: pbf, ed: ed, qty: qty + " Unit",
+                status: "Tercatat Aktif", badge: "bg-primary-subtle text-primary"
+            });
 
-            alert(`Batch ${batchNo} untuk obat ${obat} berhasil dicatat dan masuk ke antrean FEFO!`);
+            currentBatchPage = 1;
+            renderBatchTable();
+            alert(`Batch ${batchNo} berhasil dicatat dan masuk ke antrean FEFO!`);
             e.target.reset();
         }
+
+        renderBatchTable();
     </script>
 </body>
 </html>
