@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Katalog Obat - PharmaSentinel</title>
+    <title>Master Katalog & Pemasok - PharmaSentinel</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -11,7 +11,7 @@
 </head>
 <body>
 
-    <!-- 1. DYNAMIC ISLAND WRAPPER + SATELLITE LOCK -->
+    <!-- 1. DYNAMIC ISLAND WRAPPER (NAVBAR URUTAN LOGIS BARU) -->
     <div class="island-outer-wrapper">
         <button class="island-lock-satellite" id="btnNavLock" title="Kunci Tampilan Navbar">
             <i class="bi bi-unlock-fill lock-icon"></i>
@@ -44,6 +44,11 @@
                         </a>
                     </li>
                     <li>
+                        <a href="admin-audit.html" class="island-link">
+                            <i class="bi bi-clipboard-check"></i> Audit Shift
+                        </a>
+                    </li>
+                    <li>
                         <a href="admin-karantina.html" class="island-link">
                             <i class="bi bi-shield-slash"></i> Karantina ED
                         </a>
@@ -63,137 +68,210 @@
     <div class="workspace-wrapper" style="margin-top: 95px;">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h3 class="fw-bold m-0" style="color: var(--text-heading);">Master Katalog Obat & Formula</h3>
-                <p class="small m-0" style="color: var(--text-muted);">Kelola master SKU, klasifikasi terapi obat, harga jual eceran, dan ambang batas peringatan stok tipis.</p>
+                <h3 class="fw-bold m-0" style="color: var(--text-heading);">Master Katalog Obat & Data Pemasok</h3>
+                <p class="small m-0" style="color: var(--text-muted);">Kelola master SKU obat, formulasi harga, ambang batas peringatan stok tipis, dan relasi distributor PBF.</p>
             </div>
-            <button class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm" style="background: var(--brand-teal); border: none;" data-bs-toggle="modal" data-bs-target="#modalTambahObat">
-                <i class="bi bi-plus-lg me-1"></i> Tambah Master Obat
-            </button>
-        </div>
-
-        <!-- BENTO RINGKASAN KATALOG -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 p-3" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
-                    <small class="fw-bold" style="color: var(--text-muted);">Total SKU Terdaftar</small>
-                    <h3 class="fw-bold m-0 mt-1" style="color: var(--text-heading);">8 <small class="fs-6 text-muted">SKU Aktif</small></h3>
-                    <small class="text-success"><i class="bi bi-check2"></i> 100% Memiliki Induk Batch</small>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 p-3" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
-                    <small class="fw-bold" style="color: var(--text-muted);">Kategori Farmakologi</small>
-                    <h3 class="fw-bold m-0 mt-1" style="color: var(--brand-teal);">5 <small class="fs-6 text-muted">Kategori</small></h3>
-                    <small style="color: var(--text-muted);">Analgesik, Antibiotik, dll</small>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 p-3" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important; border-left: 4px solid var(--warning-amber) !important;">
-                    <small class="fw-bold" style="color: var(--warning-amber);">Mendekati Stok Batas</small>
-                    <h3 class="fw-bold m-0 mt-1" style="color: var(--warning-amber);">2 <small class="fs-6 text-muted">Obat</small></h3>
-                    <small style="color: var(--text-muted);">Stok di bawah ambang alert</small>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 p-3" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
-                    <small class="fw-bold" style="color: var(--text-muted);">Rata-rata Margin Jual</small>
-                    <h3 class="fw-bold m-0 mt-1" style="color: var(--text-heading);">32.4%</h3>
-                    <small class="text-success"><i class="bi bi-graph-up-arrow"></i> Sehat secara finansial</small>
-                </div>
+            
+            <!-- TOMBOL AKSI TERGANTUNG TAB AKTIF -->
+            <div id="btnActionContainer">
+                <button class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm" style="background: var(--brand-teal); border: none;" data-bs-toggle="modal" data-bs-target="#modalTambahObat">
+                    <i class="bi bi-plus-lg me-1"></i> Tambah Master Obat
+                </button>
             </div>
         </div>
 
-        <!-- TABEL KATALOG MASTER OBAT -->
-        <div class="card border-0 shadow-sm rounded-4 p-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="fw-bold m-0" style="color: var(--text-heading);"><i class="bi bi-table text-teal me-2" style="color: var(--brand-teal);"></i>Daftar Master Katalog Obat</h6>
-                <div class="input-group" style="max-width: 300px;">
-                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-                    <input type="text" class="form-control form-control-sm border-start-0" placeholder="Filter kode atau nama obat..." oninput="filterKatalog(this.value)">
+        <!-- TAB SEGMENTED: OBAT vs PEMASOK PBF -->
+        <ul class="nav nav-pills mb-4 p-1 rounded-pill bg-white border d-inline-flex shadow-sm" style="border-color: var(--border-subtle) !important;">
+            <li class="nav-item">
+                <button class="nav-link active rounded-pill px-4 py-2 fw-bold" id="tab-obat-btn" onclick="switchKatalogTab('obat')">
+                    <i class="bi bi-capsule me-2"></i>Master Obat (SKU)
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link rounded-pill px-4 py-2 fw-bold text-muted" id="tab-pbf-btn" onclick="switchKatalogTab('pbf')">
+                    <i class="bi bi-building me-2"></i>Master Pemasok (PBF)
+                </button>
+            </li>
+        </ul>
+
+        <!-- ========================================== -->
+        <!-- VIEW TAB 1: MASTER KATALOG OBAT (SKU)      -->
+        <!-- ========================================== -->
+        <div id="viewTabObat">
+            <!-- BENTO RINGKASAN KATALOG -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white border" style="border-color: var(--border-subtle) !important;">
+                        <small class="text-muted fw-bold">Total SKU Aktif</small>
+                        <h3 class="fw-bold m-0 mt-1" style="color: var(--text-heading);">12 <small class="fs-6 text-muted">SKU</small></h3>
+                        <small class="text-success"><i class="bi bi-check2"></i> Terintegrasi Mesin FEFO</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white border" style="border-color: var(--border-subtle) !important;">
+                        <small class="text-muted fw-bold">Kategori Terapi</small>
+                        <h3 class="fw-bold m-0 mt-1" style="color: var(--brand-teal);">6 <small class="fs-6 text-muted">Kategori</small></h3>
+                        <small class="text-muted">Analgesik, Antibiotik, dll</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white border" style="border-left: 4px solid var(--danger-red) !important;">
+                        <small class="text-danger fw-bold">Stok di Bawah Ambang Alert</small>
+                        <h3 class="fw-bold m-0 mt-1 text-danger">2 <small class="fs-6 text-muted">SKU Kritis</small></h3>
+                        <small class="text-danger">Wajib segera Reorder ke PBF</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white border" style="border-color: var(--border-subtle) !important;">
+                        <small class="text-muted fw-bold">Rata-rata Margin Jual</small>
+                        <h3 class="fw-bold m-0 mt-1" style="color: var(--text-heading);">31.8%</h3>
+                        <small class="text-success"><i class="bi bi-graph-up-arrow"></i> Target Finansial Sehat</small>
+                    </div>
                 </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead>
-                        <tr style="font-size: 0.76rem; text-transform: uppercase;">
-                            <th>Kode Obat</th>
-                            <th>Nama Obat</th>
-                            <th>Kategori & Sediaan</th>
-                            <th>Harga Jual Kasir</th>
-                            <th>Ambang Alert (Min. Stok)</th>
-                            <th>Stok Akumulasi Fisik</th>
-                            <th class="text-center">Aksi Manajemen</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableKatalogBody" style="font-size: 0.88rem;">
-                        <!-- BARIS OBAT 1 -->
-                        <tr>
-                            <td><code>OBT-001</code></td>
-                            <td><strong style="color: var(--text-heading);">Paracetamol 500mg</strong></td>
-                            <td>
-                                <span class="badge bg-light text-dark border">Analgesik</span>
-                                <span class="badge bg-secondary-subtle text-secondary">Tablet</span>
-                            </td>
-                            <td><strong style="color: var(--brand-teal);">Rp 8.000</strong> <small style="color: var(--text-muted);">/ Strip</small></td>
-                            <td>
-                                <span class="badge bg-light text-dark border">Min: 5 Strip</span>
-                            </td>
-                            <td><strong style="color: var(--text-heading);">13 Strip</strong> <small class="text-success">(Aman)</small></td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-dark rounded-pill px-3" onclick="editThreshold('OBT-001', 'Paracetamol 500mg', 5, 8000)">
-                                    <i class="bi bi-sliders me-1"></i> Atur Ambang
-                                </button>
-                            </td>
-                        </tr>
+            <!-- CARD TABEL + UNIFIED COMMAND TOOLBAR -->
+            <div class="card border-0 shadow-sm rounded-4 p-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
+                
+                <!-- TOOLBAR TERPADU (SEARCH + FILTER KATEGORI + SORT PRESETS) -->
+                <div class="row g-2 align-items-center mb-3 pb-3 border-bottom">
+                    <!-- 1. Live Search -->
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" class="form-control form-control-sm border-start-0" id="katalogSearchInput" placeholder="Cari nama obat atau kode SKU..." oninput="onKatalogSearch(this.value)">
+                        </div>
+                    </div>
 
-                        <!-- BARIS OBAT 2 -->
-                        <tr>
-                            <td><code>OBT-002</code></td>
-                            <td><strong style="color: var(--text-heading);">Amoxicillin 500mg</strong></td>
-                            <td>
-                                <span class="badge bg-light text-dark border">Antibiotik</span>
-                                <span class="badge bg-secondary-subtle text-secondary">Kapsul</span>
-                            </td>
-                            <td><strong style="color: var(--brand-teal);">Rp 12.000</strong> <small style="color: var(--text-muted);">/ Strip</small></td>
-                            <td>
-                                <span class="badge bg-warning-subtle text-warning-emphasis border">Min: 5 Strip</span>
-                            </td>
-                            <td><strong style="color: var(--danger-red);">4 Strip</strong> <small class="text-danger fw-bold">(Stok Tipis!)</small></td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-dark rounded-pill px-3" onclick="editThreshold('OBT-002', 'Amoxicillin 500mg', 5, 12000)">
-                                    <i class="bi bi-sliders me-1"></i> Atur Ambang
-                                </button>
-                            </td>
-                        </tr>
+                    <!-- 2. Filter Kategori Dropdown -->
+                    <div class="col-md-3 col-6">
+                        <select class="form-select form-select-sm rounded-pill" id="katalogCatFilter" onchange="onKatalogCatChange(this.value)">
+                            <option value="">Semua Kategori Farmakologi</option>
+                            <option value="Analgesik">Analgesik</option>
+                            <option value="Antibiotik">Antibiotik</option>
+                            <option value="Antihistamin">Antihistamin</option>
+                            <option value="Sirup">Sirup</option>
+                            <option value="Lambung">Lambung</option>
+                            <option value="Vitamin">Vitamin</option>
+                        </select>
+                    </div>
 
-                        <!-- BARIS OBAT 3 -->
-                        <tr>
-                            <td><code>OBT-006</code></td>
-                            <td><strong style="color: var(--text-heading);">Antasida Doen Suspensi</strong></td>
-                            <td>
-                                <span class="badge bg-light text-dark border">Lambung</span>
-                                <span class="badge bg-secondary-subtle text-secondary">Suspensi</span>
-                            </td>
-                            <td><strong style="color: var(--brand-teal);">Rp 11.000</strong> <small style="color: var(--text-muted);">/ Botol</small></td>
-                            <td>
-                                <span class="badge bg-warning-subtle text-warning-emphasis border">Min: 5 Botol</span>
-                            </td>
-                            <td><strong style="color: var(--danger-red);">3 Botol</strong> <small class="text-danger fw-bold">(Stok Tipis!)</small></td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-dark rounded-pill px-3" onclick="editThreshold('OBT-006', 'Antasida Doen Suspensi', 5, 11000)">
-                                    <i class="bi bi-sliders me-1"></i> Atur Ambang
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
-                <small class="text-muted fw-bold" id="katalogPaginationInfo">Memuat...</small>
-                <ul class="pagination-cockpit m-0" id="katalogPaginationControls"></ul>
+                    <!-- 3. Sort Presets (Opsi B Human-Readable) -->
+                    <div class="col-md-4 col-6">
+                        <select class="form-select form-select-sm rounded-pill" id="katalogSortSelect" onchange="onKatalogSortChange(this.value)">
+                            <option value="name_asc">⚪ Nama Obat: A → Z</option>
+                            <option value="name_desc">⚪ Nama Obat: Z → A</option>
+                            <option value="stock_asc">🔴 Sisa Stok: Paling Tipis / Kritis dulu</option>
+                            <option value="stock_desc">🟢 Sisa Stok: Paling Melimpah</option>
+                            <option value="price_desc">⚪ Harga Jual: Paling Tinggi</option>
+                            <option value="price_asc">⚪ Harga Jual: Paling Terjangkau</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- TABEL MASTER OBAT -->
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr style="font-size: 0.74rem; text-transform: uppercase; color: var(--text-muted);">
+                                <th>Kode & Nama Obat</th>
+                                <th>Kategori & Sediaan</th>
+                                <th>Harga Jual Kasir</th>
+                                <th>Ambang Alert (Min)</th>
+                                <th>Akumulasi Fisik</th>
+                                <th class="text-center">Aksi Manajemen</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableKatalogBody" style="font-size: 0.86rem;">
+                            <!-- Diinjeksi via JS Data Pipeline -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- PAGINATION BAR INSTAN (0 MS) -->
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                    <small class="text-muted fw-bold" id="katalogPaginationInfo">Memuat...</small>
+                    <ul class="pagination-cockpit m-0" id="katalogPaginationControls"></ul>
+                </div>
+
             </div>
         </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW TAB 2: MASTER PEMASOK (PBF)           -->
+        <!-- ========================================== -->
+        <div id="viewTabPbf" style="display: none;">
+            <div class="card border-0 shadow-sm rounded-4 p-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <div>
+                        <h6 class="fw-bold m-0" style="color: var(--text-heading);"><i class="bi bi-building text-teal me-2" style="color: var(--brand-teal);"></i>Daftar Pedagang Besar Farmasi (PBF) Rekanan Resmi</h6>
+                        <small class="text-muted">Distributor yang berhak memasok batch fisik obat ke gudang apotek.</small>
+                    </div>
+                    <button class="btn btn-dark btn-sm rounded-pill px-3 fw-bold" style="background: var(--brand-teal); border: none;" data-bs-toggle="modal" data-bs-target="#modalTambahPBFKatalog">
+                        <i class="bi bi-plus-lg me-1"></i> Daftarkan PBF Baru
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr style="font-size: 0.74rem; text-transform: uppercase; color: var(--text-muted);">
+                                <th>Nama Distributor (PBF)</th>
+                                <th>No. Izin BPOM / Kemenkes</th>
+                                <th>Kontak / Sales</th>
+                                <th>Alamat Kantor / Gudang</th>
+                                <th>Status Kerjasama</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablePbfBody" style="font-size: 0.86rem;">
+                            <!-- Data PBF -->
+                            <tr>
+                                <td><strong style="color: var(--text-heading);">PT. Kimia Farma Trading & Distribution</strong></td>
+                                <td><code>PBF-JBR/101/2023</code></td>
+                                <td>(021) 384-7755</td>
+                                <td>Jl. Veteran No. 9, Jakarta Pusat</td>
+                                <td><span class="badge bg-success-subtle text-success border">Aktif Utama</span></td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-0" onclick="alert('Form edit profil distributor dibuka.')"><i class="bi bi-pencil"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong style="color: var(--text-heading);">PT. Kalbe Farma Tbk</strong></td>
+                                <td><code>PBF-JBR/089/2022</code></td>
+                                <td>(021) 4287-3888</td>
+                                <td>Jl. Let. Jend. Suprapto Kav. 4, Cempaka Putih</td>
+                                <td><span class="badge bg-success-subtle text-success border">Aktif Utama</span></td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-0" onclick="alert('Form edit profil distributor dibuka.')"><i class="bi bi-pencil"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong style="color: var(--text-heading);">PT. Dexa Medica</strong></td>
+                                <td><code>PBF-JBR/204/2024</code></td>
+                                <td>(021) 745-0020</td>
+                                <td>Titan Center, Bintaro Jaya Sektor 7</td>
+                                <td><span class="badge bg-success-subtle text-success border">Aktif</span></td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-0" onclick="alert('Form edit profil distributor dibuka.')"><i class="bi bi-pencil"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong style="color: var(--text-heading);">PT. Mensa Bina Sukses</strong></td>
+                                <td><code>PBF-JBR/312/2023</code></td>
+                                <td>(021) 830-1011</td>
+                                <td>Jl. HR Rasuna Said Blok X-5, Kuningan</td>
+                                <td><span class="badge bg-success-subtle text-success border">Aktif</span></td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-0" onclick="alert('Form edit profil distributor dibuka.')"><i class="bi bi-pencil"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- MODAL 1: TAMBAH MASTER OBAT -->
@@ -201,59 +279,59 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-4 p-3 border-0 shadow">
                 <div class="modal-header border-bottom-0 pb-0">
-                    <h5 class="modal-title fw-bold" style="color: var(--text-heading);"><i class="bi bi-capsule text-teal me-2" style="color: var(--brand-teal);"></i>Tambah Master Katalog Obat</h5>
+                    <h5 class="modal-title fw-bold" style="color: var(--text-heading);"><i class="bi bi-capsule text-teal me-2" style="color: var(--brand-teal);"></i>Tambah Master Obat Baru</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="small" style="color: var(--text-muted);">Menambahkan entitas master obat baru ke dalam sistem sebelum didaftarkan batch fisiknya.</p>
-                    <form onsubmit="simpanMasterObat(event)">
+                    <form onsubmit="handleSimpanObatBaru(event)">
                         <div class="row g-2 mb-3">
                             <div class="col-5">
-                                <label class="form-label small fw-bold">Kode Obat (SKU)</label>
-                                <input type="text" class="form-control rounded-pill px-3" placeholder="Contoh: OBT-009" required>
+                                <label class="form-label small fw-bold">Kode SKU</label>
+                                <input type="text" class="form-control rounded-pill px-3" placeholder="OBT-013" required id="newObatCode">
                             </div>
                             <div class="col-7">
                                 <label class="form-label small fw-bold">Kategori Terapi</label>
-                                <select class="form-select rounded-pill px-3" required>
-                                    <option>Analgesik & Antipiretik</option>
+                                <select class="form-select rounded-pill px-3" required id="newObatCat">
+                                    <option>Analgesik</option>
                                     <option>Antibiotik</option>
                                     <option>Antihistamin</option>
-                                    <option>Lambung & Antasida</option>
-                                    <option>Sirup & Batuk</option>
+                                    <option>Lambung</option>
+                                    <option>Sirup</option>
+                                    <option>Vitamin</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label small fw-bold">Nama Lengkap Obat</label>
-                            <input type="text" class="form-control rounded-pill px-3" placeholder="Contoh: Asam Mefenamat 500mg" required>
+                            <input type="text" class="form-control rounded-pill px-3" placeholder="Contoh: Ranitidine 150mg" required id="newObatName">
                         </div>
 
                         <div class="row g-2 mb-3">
                             <div class="col-6">
                                 <label class="form-label small fw-bold">Bentuk Sediaan</label>
-                                <select class="form-select rounded-pill px-3" required>
+                                <select class="form-select rounded-pill px-3" required id="newObatForm">
                                     <option>Tablet</option>
                                     <option>Kapsul</option>
                                     <option>Kaplet</option>
                                     <option>Sirup</option>
-                                    <option>Salep / Krim</option>
+                                    <option>Suspensi</option>
                                 </select>
                             </div>
                             <div class="col-6">
                                 <label class="form-label small fw-bold">Satuan Terkecil</label>
-                                <input type="text" class="form-control rounded-pill px-3" placeholder="Strip / Botol" required>
+                                <input type="text" class="form-control rounded-pill px-3" placeholder="Strip / Botol" required id="newObatUnit">
                             </div>
                         </div>
 
                         <div class="row g-2 mb-4">
                             <div class="col-6">
                                 <label class="form-label small fw-bold">Harga Jual Kasir (Rp)</label>
-                                <input type="number" class="form-control rounded-pill px-3" placeholder="Rp eceran" required>
+                                <input type="number" class="form-control rounded-pill px-3" placeholder="Rp eceran" required id="newObatPrice">
                             </div>
                             <div class="col-6">
-                                <label class="form-label small fw-bold text-warning-emphasis">Batas Alert Stok Tipis</label>
-                                <input type="number" class="form-control rounded-pill px-3" placeholder="Min. unit" value="5" required>
+                                <label class="form-label small fw-bold text-danger">Batas Alert Stok Tipis</label>
+                                <input type="number" class="form-control rounded-pill px-3" placeholder="5" value="5" required id="newObatMin">
                             </div>
                         </div>
 
@@ -266,7 +344,7 @@
         </div>
     </div>
 
-    <!-- MODAL 2: ATUR AMBANG STOK ALERT -->
+    <!-- MODAL 2: ATUR AMBANG STOK ALERT & HARGA -->
     <div class="modal fade" id="modalThreshold" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content rounded-4 p-3 border-0 shadow">
@@ -297,12 +375,49 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- MODAL 3: TAMBAH PBF DI TAB 2 -->
+    <div class="modal fade" id="modalTambahPBFKatalog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 p-3 border-0 shadow">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold" style="color: var(--text-heading);"><i class="bi bi-building-add text-teal me-2" style="color: var(--brand-teal);"></i>Daftarkan Distributor (PBF)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="handleTambahPBFKatalog(event)">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Nama Perusahaan PBF</label>
+                            <input type="text" class="form-control rounded-pill px-3" required id="pbfKatName" placeholder="PT. Anugrah Argon Medica">
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">No. Izin PBF</label>
+                                <input type="text" class="form-control rounded-pill px-3" required id="pbfKatIzin" placeholder="PBF-JBR/401/2024">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">No. Telepon / Sales</label>
+                                <input type="text" class="form-control rounded-pill px-3" required id="pbfKatTelp" placeholder="(021) 7890-xxxx">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Alamat Kantor / Gudang</label>
+                            <textarea class="form-control rounded-3" rows="2" required id="pbfKatAlamat" placeholder="Alamat lengkap distributor..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100 py-2 rounded-pill fw-bold" style="background: var(--brand-teal); border: none;">
+                            Simpan Rekanan PBF
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/navbar.js"></script>
+
+    <!-- SCRIPT SINGLE PIPELINE: KATALOG OBAT (SEARCH + FILTER + SORT + 0MS PAGINATION) -->
     <script>
-        // DATASET MASTER KATALOG (12 DATA)
-        let katalogList = [
+        let masterObatList = [
             { code: "OBT-001", name: "Paracetamol 500mg", cat: "Analgesik", form: "Tablet", price: 8000, min: 5, stock: 13, unit: "Strip" },
             { code: "OBT-002", name: "Amoxicillin 500mg", cat: "Antibiotik", form: "Kapsul", price: 12000, min: 5, stock: 4, unit: "Strip" },
             { code: "OBT-003", name: "Cetirizine 10mg", cat: "Antihistamin", form: "Tablet", price: 6500, min: 10, stock: 25, unit: "Strip" },
@@ -317,103 +432,245 @@
             { code: "OBT-012", name: "Asam Mefenamat 500mg", cat: "Analgesik", form: "Kaplet", price: 8500, min: 5, stock: 14, unit: "Strip" }
         ];
 
-        let katalogPage = 1;
-        let searchKeyword = "";
+        let searchKatalog = "";
+        let filterKategori = "";
+        let sortKatalog = "name_asc";
+        let currentKatalogPage = 1;
         const KATALOG_PAGE_SIZE = 5;
 
-        function renderKatalogTable() {
+        let selectedObatItem = null;
+
+        // INTI PIPELINE MASTER KATALOG
+        function runKatalogPipeline() {
+            // 1. Search
+            let result = masterObatList.filter(item => {
+                const q = searchKatalog.toLowerCase();
+                return item.name.toLowerCase().includes(q) || item.code.toLowerCase().includes(q);
+            });
+
+            // 2. Filter Kategori
+            if (filterKategori !== "") {
+                result = result.filter(item => item.cat.toLowerCase() === filterKategori.toLowerCase());
+            }
+
+            // 3. Sorting Engine (Option B Presets)
+            result.sort((a, b) => {
+                switch (sortKatalog) {
+                    case "name_asc": return a.name.localeCompare(b.name);
+                    case "name_desc": return b.name.localeCompare(a.name);
+                    case "price_desc": return b.price - a.price;
+                    case "price_asc": return a.price - b.price;
+                    case "stock_asc": return a.stock - b.stock; // Paling tipis dulu
+                    case "stock_desc": return b.stock - a.stock;
+                    default: return 0;
+                }
+            });
+
+            // 4. Pagination
+            const totalItems = result.length;
+            const totalPages = Math.ceil(totalItems / KATALOG_PAGE_SIZE) || 1;
+            currentKatalogPage = Math.max(1, Math.min(currentKatalogPage, totalPages));
+
+            const startIdx = (currentKatalogPage - 1) * KATALOG_PAGE_SIZE;
+            const endIdx = Math.min(startIdx + KATALOG_PAGE_SIZE, totalItems);
+            const paginatedRows = result.slice(startIdx, endIdx);
+
+            // 5. Render ke Tabel
             const tbody = document.getElementById("tableKatalogBody");
             tbody.innerHTML = "";
 
-            const filtered = katalogList.filter(k => 
-                k.name.toLowerCase().includes(searchKeyword.toLowerCase()) || 
-                k.code.toLowerCase().includes(searchKeyword.toLowerCase())
-            );
+            if (paginatedRows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted"><i class="bi bi-inbox fs-3 d-block mb-1"></i>Tidak ada SKU obat yang cocok.</td></tr>`;
+                document.getElementById("katalogPaginationInfo").innerText = "0 SKU ditemukan";
+                document.getElementById("katalogPaginationControls").innerHTML = "";
+                return;
+            }
 
-            const total = filtered.length;
-            const totalPages = Math.ceil(total / KATALOG_PAGE_SIZE) || 1;
-            katalogPage = Math.max(1, Math.min(katalogPage, totalPages));
-
-            const start = (katalogPage - 1) * KATALOG_PAGE_SIZE;
-            const end = Math.min(start + KATALOG_PAGE_SIZE, total);
-            const pageData = filtered.slice(start, end);
-
-            pageData.forEach(item => {
+            paginatedRows.forEach(item => {
                 const isLow = item.stock <= item.min;
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
-                    <td><code>${item.code}</code></td>
-                    <td><strong style="color: var(--text-heading);">${item.name}</strong></td>
+                    <td>
+                        <code>${item.code}</code>
+                        <div class="fw-bold mt-1" style="color: var(--text-heading);">${item.name}</div>
+                    </td>
                     <td>
                         <span class="badge bg-light text-dark border">${item.cat}</span>
                         <span class="badge bg-secondary-subtle text-secondary">${item.form}</span>
                     </td>
                     <td><strong style="color: var(--brand-teal);">Rp ${item.price.toLocaleString('id-ID')}</strong> <small class="text-muted">/ ${item.unit}</small></td>
-                    <td><span class="badge ${isLow ? 'bg-warning-subtle text-warning-emphasis border' : 'bg-light text-dark border'}">Min: ${item.min} ${item.unit}</span></td>
-                    <td><strong style="color: ${isLow ? 'var(--danger-red)' : 'var(--text-heading)'};">${item.stock} ${item.unit}</strong> ${isLow ? '<small class="text-danger fw-bold">(Stok Tipis!)</small>' : '<small class="text-success">(Aman)</small>'}</td>
+                    <td>
+                        <span class="badge ${isLow ? 'bg-danger-subtle text-danger border' : 'bg-light text-dark border'}">Min: ${item.min} ${item.unit}</span>
+                    </td>
+                    <td>
+                        <strong style="color: ${isLow ? 'var(--danger-red)' : 'var(--text-heading)'};">${item.stock} ${item.unit}</strong> 
+                        ${isLow ? '<small class="text-danger fw-bold d-block">(Stok Tipis!)</small>' : '<small class="text-success d-block">(Aman)</small>'}
+                    </td>
                     <td class="text-center">
-                        <button class="btn btn-sm btn-outline-dark rounded-pill px-3" onclick="editThreshold('${item.code}', '${item.name}', ${item.min}, ${item.price})">
-                            <i class="bi bi-sliders me-1"></i> Atur Ambang
-                        </button>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-dark rounded-pill px-2 py-0 me-1" title="Atur Ambang & Harga" onclick="openThresholdModal('${item.code}')">
+                                <i class="bi bi-sliders"></i>
+                            </button>
+                            <button class="btn btn-outline-danger rounded-pill px-2 py-0" title="Nonaktifkan SKU" onclick="deaktivasiSKU('${item.code}', '${item.name}')">
+                                <i class="bi bi-archive"></i>
+                            </button>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            // Controls
-            document.getElementById("katalogPaginationInfo").innerText = `Menampilkan ${total === 0 ? 0 : start + 1}-${end} dari ${total} SKU obat`;
+            // 6. Pagination UI
+            document.getElementById("katalogPaginationInfo").innerText = `Menampilkan ${startIdx + 1}-${endIdx} dari ${totalItems} SKU obat`;
+            renderKatalogPaginationUI(totalPages);
+        }
+
+        function renderKatalogPaginationUI(totalPages) {
             const controls = document.getElementById("katalogPaginationControls");
             controls.innerHTML = "";
 
             const prev = document.createElement("button");
             prev.className = "page-pill-btn";
             prev.innerHTML = '<i class="bi bi-chevron-left"></i>';
-            prev.disabled = (katalogPage === 1);
-            prev.onclick = () => { katalogPage--; renderKatalogTable(); };
+            prev.disabled = (currentKatalogPage === 1);
+            prev.onclick = () => { currentKatalogPage--; runKatalogPipeline(); };
             controls.appendChild(prev);
 
             for (let i = 1; i <= totalPages; i++) {
                 const btn = document.createElement("button");
-                btn.className = `page-pill-btn ${i === katalogPage ? 'active' : ''}`;
+                btn.className = `page-pill-btn ${i === currentKatalogPage ? 'active' : ''}`;
                 btn.innerText = i;
-                btn.onclick = () => { katalogPage = i; renderKatalogTable(); };
+                btn.onclick = () => { currentKatalogPage = i; runKatalogPipeline(); };
                 controls.appendChild(btn);
             }
 
             const next = document.createElement("button");
             next.className = "page-pill-btn";
             next.innerHTML = '<i class="bi bi-chevron-right"></i>';
-            next.disabled = (katalogPage === totalPages);
-            next.onclick = () => { katalogPage++; renderKatalogTable(); };
+            next.disabled = (currentKatalogPage === totalPages);
+            next.onclick = () => { currentKatalogPage++; runKatalogPipeline(); };
             controls.appendChild(next);
         }
 
-        function filterKatalog(val) {
-            searchKeyword = val;
-            katalogPage = 1;
-            renderKatalogTable();
+        // HANDLERS
+        function onKatalogSearch(val) {
+            searchKatalog = val;
+            currentKatalogPage = 1;
+            runKatalogPipeline();
         }
 
-        function editThreshold(kode, nama, minStok, harga) {
-            document.getElementById('editObatKode').innerText = kode;
-            document.getElementById('editObatNama').innerText = nama;
-            document.getElementById('inputThresholdVal').value = minStok;
-            document.getElementById('inputHargaVal').value = harga;
-            new bootstrap.Modal(document.getElementById('modalThreshold')).show();
+        function onKatalogCatChange(val) {
+            filterKategori = val;
+            currentKatalogPage = 1;
+            runKatalogPipeline();
+        }
+
+        function onKatalogSortChange(val) {
+            sortKatalog = val;
+            currentKatalogPage = 1;
+            runKatalogPipeline();
+        }
+
+        // MODAL ACTIONS
+        function openThresholdModal(code) {
+            selectedObatItem = masterObatList.find(o => o.code === code);
+            if (!selectedObatItem) return;
+
+            document.getElementById("editObatKode").innerText = selectedObatItem.code;
+            document.getElementById("editObatNama").innerText = selectedObatItem.name;
+            document.getElementById("inputThresholdVal").value = selectedObatItem.min;
+            document.getElementById("inputHargaVal").value = selectedObatItem.price;
+
+            new bootstrap.Modal(document.getElementById("modalThreshold")).show();
         }
 
         function simpanThreshold() {
-            alert('Pengaturan ambang batas stok dan harga jual berhasil diperbarui!');
-            bootstrap.Modal.getInstance(document.getElementById('modalThreshold')).hide();
+            selectedObatItem.min = parseInt(document.getElementById("inputThresholdVal").value) || selectedObatItem.min;
+            selectedObatItem.price = parseInt(document.getElementById("inputHargaVal").value) || selectedObatItem.price;
+
+            runKatalogPipeline();
+            bootstrap.Modal.getInstance(document.getElementById("modalThreshold")).hide();
+            alert(`Pengaturan ambang minimum & harga untuk ${selectedObatItem.name} berhasil diperbarui!`);
         }
 
-        function simpanMasterObat(e) {
+        function handleSimpanObatBaru(e) {
             e.preventDefault();
-            alert('Master obat baru berhasil ditambahkan!');
-            bootstrap.Modal.getInstance(document.getElementById('modalTambahObat')).hide();
+            const code = document.getElementById("newObatCode").value;
+            const name = document.getElementById("newObatName").value;
+            const cat = document.getElementById("newObatCat").value;
+            const form = document.getElementById("newObatForm").value;
+            const unit = document.getElementById("newObatUnit").value;
+            const price = parseInt(document.getElementById("newObatPrice").value);
+            const min = parseInt(document.getElementById("newObatMin").value);
+
+            masterObatList.unshift({
+                code: code, name: name, cat: cat, form: form, price: price, min: min, stock: 0, unit: unit
+            });
+
+            currentKatalogPage = 1;
+            runKatalogPipeline();
+            bootstrap.Modal.getInstance(document.getElementById("modalTambahObat")).hide();
+            alert(`Master Obat "${name}" berhasil didaftarkan ke sistem!`);
+            e.target.reset();
         }
 
-        renderKatalogTable();
+        function deaktivasiSKU(code, name) {
+            if (confirm(`AUDIT FARMASI: Apakah Anda yakin ingin mengarsipkan / menonaktifkan SKU ${code} (${name})?\n\nObat ini akan disembunyikan dari meja kasir, namun riwayat transaksi masa lalu tetap tersimpan utuh di database.`)) {
+                masterObatList = masterObatList.filter(o => o.code !== code);
+                runKatalogPipeline();
+                alert(`SKU ${code} berhasil dinonaktifkan secara aman (Soft Delete).`);
+            }
+        }
+
+        // TAB SWITCHER
+        function switchKatalogTab(tab) {
+            const btnObat = document.getElementById("tab-obat-btn");
+            const btnPbf = document.getElementById("tab-pbf-btn");
+            const viewObat = document.getElementById("viewTabObat");
+            const viewPbf = document.getElementById("viewTabPbf");
+            const btnContainer = document.getElementById("btnActionContainer");
+
+            if (tab === 'obat') {
+                btnObat.className = "nav-link active rounded-pill px-4 py-2 fw-bold";
+                btnPbf.className = "nav-link rounded-pill px-4 py-2 fw-bold text-muted";
+                viewObat.style.display = "block";
+                viewPbf.style.display = "none";
+                btnContainer.innerHTML = `<button class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm" style="background: var(--brand-teal); border: none;" data-bs-toggle="modal" data-bs-target="#modalTambahObat"><i class="bi bi-plus-lg me-1"></i> Tambah Master Obat</button>`;
+            } else {
+                btnPbf.className = "nav-link active rounded-pill px-4 py-2 fw-bold";
+                btnObat.className = "nav-link rounded-pill px-4 py-2 fw-bold text-muted";
+                viewObat.style.display = "none";
+                viewPbf.style.display = "block";
+                btnContainer.innerHTML = `<button class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm" style="background: var(--brand-teal); border: none;" data-bs-toggle="modal" data-bs-target="#modalTambahPBFKatalog"><i class="bi bi-plus-lg me-1"></i> Daftarkan PBF Baru</button>`;
+            }
+        }
+
+        function handleTambahPBFKatalog(e) {
+            e.preventDefault();
+            const name = document.getElementById("pbfKatName").value;
+            const izin = document.getElementById("pbfKatIzin").value;
+            const telp = document.getElementById("pbfKatTelp").value;
+            const alamat = document.getElementById("pbfKatAlamat").value;
+
+            const tbody = document.getElementById("tablePbfBody");
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><strong style="color: var(--text-heading);">${name}</strong></td>
+                <td><code>${izin}</code></td>
+                <td>${telp}</td>
+                <td>${alamat}</td>
+                <td><span class="badge bg-primary-subtle text-primary border">Baru Terdaftar</span></td>
+                <td class="text-center"><button class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-0"><i class="bi bi-pencil"></i></button></td>
+            `;
+            tbody.insertBefore(tr, tbody.firstChild);
+
+            bootstrap.Modal.getInstance(document.getElementById("modalTambahPBFKatalog")).hide();
+            alert(`Distributor "${name}" berhasil didaftarkan sebagai rekanan resmi!`);
+            e.target.reset();
+        }
+
+        // Jalankan saat load
+        runKatalogPipeline();
     </script>
 </body>
 </html>

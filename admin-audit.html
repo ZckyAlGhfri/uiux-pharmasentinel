@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Shift & Rekonsiliasi Kas - PharmaSentinel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- 1. DYNAMIC ISLAND WRAPPER (NAVBAR URUTAN LOGIS BARU) -->
+    <div class="island-outer-wrapper">
+        <button class="island-lock-satellite" id="btnNavLock" title="Kunci Tampilan Navbar">
+            <i class="bi bi-unlock-fill lock-icon"></i>
+        </button>
+
+        <nav class="dynamic-island-nav">
+            <div class="island-brand-row">
+                <a href="admin-dashboard.html" class="island-brand">
+                    <i class="bi bi-shield-check"></i>
+                    <span>PharmaSentinel</span>
+                </a>
+                <div class="island-pulse-dot" title="Sistem Aktif"></div>
+            </div>
+
+            <div class="island-collapsible-content">
+                <ul class="island-menu">
+                    <li>
+                        <a href="admin-dashboard.html" class="island-link">
+                            <i class="bi bi-radar"></i> Radar & Telemetri
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-katalog.html" class="island-link">
+                            <i class="bi bi-database"></i> Master Katalog
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-batch.html" class="island-link">
+                            <i class="bi bi-box-seam"></i> Penerimaan Batch
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-audit.html" class="island-link active">
+                            <i class="bi bi-clipboard-check"></i> Audit Shift
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-karantina.html" class="island-link">
+                            <i class="bi bi-shield-slash"></i> Karantina ED
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="island-user">
+                    <span class="badge badge-role" style="background: #e0e7ff; color: #4338ca;">ADMIN</span>
+                    <span class="island-user-name">Kelompok 6</span>
+                    <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- 2. WORKSPACE AUDIT SHIFT -->
+    <div class="workspace-wrapper" style="margin-top: 95px;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold m-0" style="color: var(--text-heading);">Audit Shift & Rekonsiliasi Kasir</h3>
+                <p class="small m-0" style="color: var(--text-muted);">Verifikasi setoran uang fisik laci kasir (Blind Close) dan audit pemotongan nomor batch FEFO.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-dark btn-sm rounded-pill px-3 fw-bold" style="background: var(--brand-teal); border: none;" onclick="sahkanShift()">
+                    <i class="bi bi-check2-circle me-1"></i> Sahkan & Tutup Shift Resmi
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. BENTO COCKPIT: REKONSILIASI KAS (BLIND CLOSE SYSTEM) -->
+        <div class="row g-3 mb-4">
+            <!-- Parameter Shift -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white border" style="border-color: var(--border-subtle) !important;">
+                    <small class="text-muted fw-bold">Kasir & Waktu Tugas</small>
+                    <h5 class="fw-bold mt-1 m-0" style="color: var(--text-heading);">Denna Agustin</h5>
+                    <small class="text-muted d-block mt-1"><i class="bi bi-clock me-1"></i>Shift 2 (14:00 - 21:00 WIB)</small>
+                    <span class="badge bg-success-subtle text-success border rounded-pill mt-2 px-2" style="font-size: 0.7rem;">Menunggu Pengesahan</span>
+                </div>
+            </div>
+
+            <!-- Total Penjualan Sistem -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white border" style="border-color: var(--border-subtle) !important;">
+                    <small class="text-muted fw-bold">Penjualan Sistem (Tercatat)</small>
+                    <h4 class="fw-bold mt-1 m-0" style="color: var(--text-heading);">Rp 845.000</h4>
+                    <div class="small text-muted mt-1" style="font-size: 0.75rem;">
+                        Tunai: <strong>Rp 520.000</strong> | QRIS: <strong>Rp 325.000</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Uang Fisik Diinput Kasir (Blind Input) -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white border" style="border-color: var(--border-subtle) !important;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted fw-bold">Fisik Kas Laci (Input Kasir)</small>
+                        <i class="bi bi-cash-stack text-teal" style="color: var(--brand-teal);"></i>
+                    </div>
+                    <h4 class="fw-bold mt-1 m-0" style="color: var(--brand-teal);" id="displayFisikKasir">Rp 520.000</h4>
+                    <small class="text-muted" style="font-size: 0.72rem;">Dihitung manual sebelum tutup laci</small>
+                </div>
+            </div>
+
+            <!-- Status Selisih (Discrepancy Meter) -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white border" id="cardSelisih" style="border-left: 4px solid var(--success-green) !important;">
+                    <small class="text-muted fw-bold">Status Selisih Kas</small>
+                    <h4 class="fw-bold mt-1 m-0 text-success" id="textSelisih">Rp 0 (MATCH)</h4>
+                    <small class="text-success" id="subtextSelisih"><i class="bi bi-check-circle-fill"></i> Kas fisik 100% seimbang</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. TABEL AUDIT TRANSAKSI & PEMOTONGAN BATCH FEFO -->
+        <div class="card border-0 shadow-sm rounded-4 p-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h6 class="fw-bold m-0" style="color: var(--text-heading);"><i class="bi bi-shield-check text-teal me-2" style="color: var(--brand-teal);"></i>Audit Log Transaksi & Verifikasi Batch Fisik</h6>
+                    <small class="text-muted">Cek kecocokan antara nota kasir dengan pengurangan stok fisik pada nomor batch di rak etalase.</small>
+                </div>
+                <button class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold" onclick="simulasiSelisihKas()">
+                    <i class="bi bi-exclamation-triangle me-1"></i> Simulasi Kasir Selisih
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr style="font-size: 0.74rem; text-transform: uppercase; color: var(--text-muted);">
+                            <th>No Faktur & Waktu</th>
+                            <th>Rincian Item & Obat</th>
+                            <th>Alokasi Nomor Batch Terpotong (FEFO)</th>
+                            <th>Metode Bayar</th>
+                            <th>Total Nilai</th>
+                            <th class="text-center">Status Audit</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 0.86rem;">
+                        <!-- BARIS 1: SPLIT BATCH AUDIT -->
+                        <tr>
+                            <td>
+                                <code>#INV-20261104-018</code>
+                                <div class="small text-muted" style="font-size: 0.72rem;">20:15 WIB</div>
+                            </td>
+                            <td>
+                                <strong>Paracetamol 500mg</strong>
+                                <div class="small text-muted">Kuantitas: 5 Strip</div>
+                            </td>
+                            <td>
+                                <span class="badge bg-warning-subtle text-warning-emphasis border mb-1" style="font-size: 0.65rem;">SPLIT-BATCH VERIFIED</span>
+                                <div class="small" style="color: var(--text-heading);">
+                                    • 3x <code>BTH-PCT-A1</code> (ED: 15 Nov 26 - Batch Kritis)<br>
+                                    • 2x <code>BTH-PCT-A2</code> (ED: 20 Jan 27 - Batch Lanjutan)
+                                </div>
+                            </td>
+                            <td><span class="badge bg-success-subtle text-success border">QRIS</span></td>
+                            <td><strong style="color: var(--text-heading);">Rp 40.000</strong></td>
+                            <td class="text-center">
+                                <span class="badge bg-light text-success border rounded-pill px-2 py-1"><i class="bi bi-check-lg me-1"></i>FEFO Valid</span>
+                            </td>
+                        </tr>
+
+                        <!-- BARIS 2: BATCH TUNGGAL -->
+                        <tr>
+                            <td>
+                                <code>#INV-20261104-017</code>
+                                <div class="small text-muted" style="font-size: 0.72rem;">19:42 WIB</div>
+                            </td>
+                            <td>
+                                <strong>Amoxicillin 500mg</strong>
+                                <div class="small text-muted">Kuantitas: 2 Strip</div>
+                            </td>
+                            <td>
+                                <div class="small" style="color: var(--text-heading);">
+                                    • 2x <code>BTH-AMX-09</code> (ED: 05 Nov 26 - Batch Kritis Prioritas 1)
+                                </div>
+                            </td>
+                            <td><span class="badge bg-light text-dark border">Tunai</span></td>
+                            <td><strong style="color: var(--text-heading);">Rp 24.000</strong></td>
+                            <td class="text-center">
+                                <span class="badge bg-light text-success border rounded-pill px-2 py-1"><i class="bi bi-check-lg me-1"></i>FEFO Valid</span>
+                            </td>
+                        </tr>
+
+                        <!-- BARIS 3: BATCH SIRUP -->
+                        <tr>
+                            <td>
+                                <code>#INV-20261104-016</code>
+                                <div class="small text-muted" style="font-size: 0.72rem;">18:50 WIB</div>
+                            </td>
+                            <td>
+                                <strong>OBH Tropica Plus 100ml</strong>
+                                <div class="small text-muted">Kuantitas: 1 Botol</div>
+                            </td>
+                            <td>
+                                <div class="small" style="color: var(--text-heading);">
+                                    • 1x <code>BTH-OBH-01</code> (ED: 18 Mei 27)
+                                </div>
+                            </td>
+                            <td><span class="badge bg-light text-dark border">Tunai</span></td>
+                            <td><strong style="color: var(--text-heading);">Rp 24.000</strong></td>
+                            <td class="text-center">
+                                <span class="badge bg-light text-success border rounded-pill px-2 py-1"><i class="bi bi-check-lg me-1"></i>FEFO Valid</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-3 rounded-3 mt-3 bg-light border d-flex justify-content-between align-items-center">
+                <small class="text-muted"><i class="bi bi-info-circle me-1"></i> Audit ini memverifikasi bahwa mesin kasir mematuhi integritas database transaksional (ACID).</small>
+                <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" onclick="alert('Laporan Berita Acara Shift berhasil diunduh (PDF Simulated)!')">
+                    <i class="bi bi-file-earmark-pdf me-1"></i> Unduh Berita Acara Audit
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT BOOTSTRAP & DYNAMIC ISLAND -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/navbar.js"></script>
+    <script>
+        let isDiscrepancy = false;
+
+        function sahkanShift() {
+            if (isDiscrepancy) {
+                alert("PERINGATAN AUDIT: Terdapat selisih kas fisik! Anda wajib mencetak dan menandatangani Berita Acara Selisih sebelum mengesahkan tutup shift.");
+                return;
+            }
+            alert("SUKSES AUDIT: Shift 2 Kasir Denna Agustin telah disahkan secara resmi. Laci kas ditutup dan setoran tunai Rp 520.000 dibukukan ke brankas utama.");
+        }
+
+        // FITUR DEMO UNTUK MEMIKAT DOSEN PENGUJI: SIMULASI JIKA KASIR CURANG / KURANG UANG
+        function simulasiSelisihKas() {
+            isDiscrepancy = !isDiscrepancy;
+            const card = document.getElementById("cardSelisih");
+            const text = document.getElementById("textSelisih");
+            const subtext = document.getElementById("subtextSelisih");
+            const fisik = document.getElementById("displayFisikKasir");
+
+            if (isDiscrepancy) {
+                // Simulasi uang laci kasir kurang Rp 20.000
+                fisik.innerText = "Rp 500.000";
+                card.style.setProperty("border-left", "4px solid var(--danger-red)", "important");
+                text.className = "fw-bold mt-1 m-0 text-danger";
+                text.innerText = "-Rp 20.000 (SELISIH MINUS)";
+                subtext.className = "text-danger fw-bold";
+                subtext.innerHTML = '<i class="bi bi-exclamation-octagon-fill"></i> Kas fisik kurang dari catatan sistem!';
+            } else {
+                fisik.innerText = "Rp 520.000";
+                card.style.setProperty("border-left", "4px solid var(--success-green)", "important");
+                text.className = "fw-bold mt-1 m-0 text-success";
+                text.innerText = "Rp 0 (MATCH)";
+                subtext.className = "text-success";
+                subtext.innerHTML = '<i class="bi bi-check-circle-fill"></i> Kas fisik 100% seimbang';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -11,8 +11,7 @@
 </head>
 <body>
 
-    <!-- 1. DYNAMIC ISLAND KASIR -->
-    <!-- 1. DYNAMIC ISLAND WRAPPER + SATELLITE LOCK -->
+    <!-- 1. DYNAMIC ISLAND KASIR (WITH PERSISTENT LOCK) -->
     <div class="island-outer-wrapper">
         <button class="island-lock-satellite" id="btnNavLock" title="Kunci Tampilan Navbar">
             <i class="bi bi-unlock-fill lock-icon"></i>
@@ -48,123 +47,239 @@
 
                 <div class="island-user">
                     <span class="badge badge-role" style="background: var(--brand-teal-light); color: var(--brand-teal);">KASIR</span>
-                    <span class="island-user-name"> A. (Kel. 6)</span>
+                    <span class="island-user-name">Kelompok 6</span>
                     <a href="index.html" class="text-danger ms-1 text-decoration-none" title="Keluar"><i class="bi bi-box-arrow-right"></i></a>
                 </div>
             </div>
         </nav>
     </div>
 
-    <!-- 2. WORKSPACE CEK STOK & LOKASI RAK -->
+    <!-- 2. WORKSPACE CEK STOK & RAK FISIK -->
     <div class="workspace-wrapper" style="margin-top: 95px;">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h3 class="fw-bold m-0" style="color: var(--text-heading);">Informasi Ketersediaan & Lokasi Rak</h3>
-                <p class="small m-0" style="color: var(--text-muted);">Pencarian cepat stok etalase dan titik rak fisik obat untuk melayani pertanyaan pasien di meja depan.</p>
+                <h3 class="fw-bold m-0" style="color: var(--text-heading);">Informasi Ketersediaan & Titik Rak Obat</h3>
+                <p class="small m-0" style="color: var(--text-muted);">Pencarian cepat stok etalase dan titik simpan fisik obat untuk menjawab pasien di meja depan.</p>
             </div>
             <a href="kasir-pos.html" class="btn btn-dark rounded-pill px-4 fw-bold btn-sm shadow-sm" style="background: var(--brand-teal); border: none;">
                 <i class="bi bi-cart-plus me-1"></i> Buka Meja Kasir POS
             </a>
         </div>
 
-        <!-- SEARCH BAR & FILTER -->
-        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
-            <div class="input-group">
-                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-                <input type="text" class="form-control border-start-0" placeholder="Ketik nama obat, khasiat, atau lokasi rak..." oninput="filterStok(this.value)">
-            </div>
-        </div>
-
-        <!-- TABEL READ-ONLY STOK KASIR -->
+        <!-- CARD TABEL + UNIFIED COMMAND TOOLBAR -->
         <div class="card border-0 shadow-sm rounded-4 p-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="fw-bold m-0" style="color: var(--text-heading);"><i class="bi bi-box text-teal me-2" style="color: var(--brand-teal);"></i>Daftar Ketersediaan Stok Aktif</h6>
-                <span class="badge bg-light text-muted border rounded-pill px-2">Data Real-Time</span>
+            
+            <!-- TOOLBAR TERPADU (SEARCH + FILTER RAK + SORT PRESETS) -->
+            <div class="row g-2 align-items-center mb-3 pb-3 border-bottom">
+                <!-- 1. Live Search -->
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" class="form-control form-control-sm border-start-0" id="stokSearchInput" placeholder="Cari obat, sediaan, atau titik rak..." oninput="onStokSearch(this.value)">
+                    </div>
+                </div>
+
+                <!-- 2. Dropdown Filter Lokasi Rak -->
+                <div class="col-md-3 col-6">
+                    <select class="form-select form-select-sm rounded-pill" id="stokRakFilter" onchange="onStokRakChange(this.value)">
+                        <option value="">Semua Lokasi Rak</option>
+                        <option value="Rak A">Rak A (Tablet & Kaplet)</option>
+                        <option value="Rak B">Rak B (Antibiotik)</option>
+                        <option value="Rak C">Rak C (Saluran Cerna)</option>
+                        <option value="Etalase Sirup">Etalase Sirup</option>
+                        <option value="Etalase Vitamin">Etalase Vitamin</option>
+                    </select>
+                </div>
+
+                <!-- 3. Sort Presets (Opsi B Human-Readable) -->
+                <div class="col-md-4 col-6">
+                    <select class="form-select form-select-sm rounded-pill" id="stokSortSelect" onchange="onStokSortChange(this.value)">
+                        <option value="name_asc">⚪ Nama Obat: A → Z</option>
+                        <option value="name_desc">⚪ Nama Obat: Z → A</option>
+                        <option value="stock_desc">🟢 Sisa Stok: Paling Banyak</option>
+                        <option value="stock_asc">🔴 Sisa Stok: Paling Tipis / Kritis</option>
+                        <option value="price_asc">⚪ Harga Jual: Termurah</option>
+                        <option value="price_desc">⚪ Harga Jual: Termahal</option>
+                    </select>
+                </div>
             </div>
 
+            <!-- TABEL STOK KASIR (READ-ONLY) -->
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead>
-                        <tr style="font-size: 0.76rem; text-transform: uppercase;">
+                        <tr style="font-size: 0.74rem; text-transform: uppercase; color: var(--text-muted);">
                             <th>Kode & Nama Obat</th>
                             <th>Bentuk Sediaan</th>
-                            <th>Lokasi Rak Fisik</th>
-                            <th>Harga Jual Konsumen</th>
+                            <th>Titik Lokasi Rak Fisik</th>
+                            <th>Harga Jual Pasien</th>
                             <th>Status Ketersediaan</th>
                             <th>Batch Prioritas FEFO</th>
                         </tr>
                     </thead>
-                    <tbody id="tableStokBody" style="font-size: 0.88rem;">
-                        <tr>
-                            <td>
-                                <code>OBT-001</code>
-                                <div class="fw-bold mt-1" style="color: var(--text-heading);">Paracetamol 500mg</div>
-                            </td>
-                            <td><span class="badge bg-light text-dark border">Tablet</span></td>
-                            <td><span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-geo-alt me-1"></i>Rak A - Baris 2</span></td>
-                            <td><strong style="color: var(--brand-teal);">Rp 8.000</strong> <small class="text-muted">/ Strip</small></td>
-                            <td><span class="badge bg-success-subtle text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Tersedia (13 Strip)</span></td>
-                            <td style="color: var(--text-muted); font-size: 0.8rem;">
-                                BTH-PCT-A1 (ED: 15 Nov 2026)
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <code>OBT-002</code>
-                                <div class="fw-bold mt-1" style="color: var(--text-heading);">Amoxicillin 500mg</div>
-                            </td>
-                            <td><span class="badge bg-light text-dark border">Kapsul</span></td>
-                            <td><span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-geo-alt me-1"></i>Rak Antibiotik - B1</span></td>
-                            <td><strong style="color: var(--brand-teal);">Rp 12.000</strong> <small class="text-muted">/ Strip</small></td>
-                            <td><span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2 py-1"><i class="bi bi-exclamation-triangle me-1"></i>Sisa 4 Strip (Tipis)</span></td>
-                            <td style="color: var(--danger-red); font-size: 0.8rem; font-weight: 700;">
-                                BTH-AMX-09 (ED: 05 Nov 2026)
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <code>OBT-004</code>
-                                <div class="fw-bold mt-1" style="color: var(--text-heading);">OBH Tropica Plus 100ml</div>
-                            </td>
-                            <td><span class="badge bg-light text-dark border">Sirup</span></td>
-                            <td><span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-geo-alt me-1"></i>Etalase Sirup - E3</span></td>
-                            <td><strong style="color: var(--brand-teal);">Rp 24.000</strong> <small class="text-muted">/ Botol</small></td>
-                            <td><span class="badge bg-success-subtle text-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Tersedia (8 Botol)</span></td>
-                            <td style="color: var(--text-muted); font-size: 0.8rem;">
-                                BTH-OBH-01 (ED: 18 Mei 2027)
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <code>OBT-006</code>
-                                <div class="fw-bold mt-1" style="color: var(--text-heading);">Antasida Doen Suspensi</div>
-                            </td>
-                            <td><span class="badge bg-light text-dark border">Suspensi</span></td>
-                            <td><span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-geo-alt me-1"></i>Rak Lambung - C2</span></td>
-                            <td><strong style="color: var(--brand-teal);">Rp 11.000</strong> <small class="text-muted">/ Botol</small></td>
-                            <td><span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2 py-1"><i class="bi bi-exclamation-triangle me-1"></i>Sisa 3 Botol (Tipis)</span></td>
-                            <td style="color: var(--text-muted); font-size: 0.8rem;">
-                                BTH-ATD-03 (ED: 02 Des 2026)
-                            </td>
-                        </tr>
+                    <tbody id="tableStokKasirBody" style="font-size: 0.86rem;">
+                        <!-- Diinjeksi via JS Pipeline -->
                     </tbody>
                 </table>
             </div>
+
+            <!-- PAGINATION BAR INSTAN (0 MS) -->
+            <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                <small class="text-muted fw-bold" id="stokPaginationInfo">Memuat...</small>
+                <ul class="pagination-cockpit m-0" id="stokPaginationControls"></ul>
+            </div>
+
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/navbar.js"></script>
+
+    <!-- SCRIPT SINGLE PIPELINE: CEK STOK KASIR -->
     <script>
-        function filterStok(query) {
-            const rows = document.querySelectorAll('#tableStokBody tr');
-            rows.forEach(r => {
-                const text = r.innerText.toLowerCase();
-                r.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
+        let stokDataset = [
+            { code: "OBT-001", name: "Paracetamol 500mg", form: "Tablet", rak: "Rak A - Baris 2", price: 8000, stock: 13, unit: "Strip", fefo: "BTH-PCT-A1 (15 Nov 2026)" },
+            { code: "OBT-002", name: "Amoxicillin 500mg", form: "Kapsul", rak: "Rak B - Baris 1", price: 12000, stock: 4, unit: "Strip", fefo: "BTH-AMX-09 (05 Nov 2026)" },
+            { code: "OBT-003", name: "Cetirizine 10mg", form: "Tablet", rak: "Rak A - Baris 3", price: 6500, stock: 25, unit: "Strip", fefo: "BTH-CTZ-77 (10 Des 2026)" },
+            { code: "OBT-004", name: "OBH Tropica Plus 100ml", form: "Sirup", rak: "Etalase Sirup - E1", price: 24000, stock: 8, unit: "Botol", fefo: "BTH-OBH-01 (18 Mei 2027)" },
+            { code: "OBT-005", name: "Ibuprofen 400mg", form: "Kaplet", rak: "Rak A - Baris 1", price: 9500, stock: 20, unit: "Strip", fefo: "BTH-IBU-12 (22 Nov 2026)" },
+            { code: "OBT-006", name: "Antasida Doen Suspensi", form: "Suspensi", rak: "Rak C - Baris 2", price: 11000, stock: 3, unit: "Botol", fefo: "BTH-ATD-03 (02 Des 2026)" },
+            { code: "OBT-007", name: "Cefixime 100mg", form: "Kapsul", rak: "Rak B - Baris 2", price: 32000, stock: 6, unit: "Strip", fefo: "BTH-CFX-88 (15 Jan 2027)" },
+            { code: "OBT-008", name: "Dexamethasone 0.5mg", form: "Tablet", rak: "Rak A - Baris 4", price: 5000, stock: 20, unit: "Strip", fefo: "BTH-DXM-01 (08 Des 2026)" },
+            { code: "OBT-009", name: "Omeprazole 20mg", form: "Kapsul", rak: "Rak C - Baris 1", price: 18000, stock: 12, unit: "Strip", fefo: "BTH-OMP-04 (14 Des 2026)" },
+            { code: "OBT-010", name: "Vitamin C 500mg IPI", form: "Tablet", rak: "Etalase Vitamin - V1", price: 9000, stock: 30, unit: "Botol", fefo: "BTH-VTC-90 (10 Mar 2027)" },
+            { code: "OBT-011", name: "Loperamide 2mg", form: "Tablet", rak: "Rak C - Baris 3", price: 4500, stock: 18, unit: "Strip", fefo: "BTH-LPR-11 (28 Nov 2026)" },
+            { code: "OBT-012", name: "Asam Mefenamat 500mg", form: "Kaplet", rak: "Rak A - Baris 2", price: 8500, stock: 14, unit: "Strip", fefo: "BTH-ASM-02 (12 Jan 2027)" }
+        ];
+
+        let searchStok = "";
+        let filterRak = "";
+        let sortStok = "name_asc";
+        let currentStokPage = 1;
+        const STOK_PAGE_SIZE = 6; // 6 baris per halaman
+
+        function runStokPipeline() {
+            // 1. Search
+            let result = stokDataset.filter(item => {
+                const q = searchStok.toLowerCase();
+                return item.name.toLowerCase().includes(q) || 
+                       item.code.toLowerCase().includes(q) || 
+                       item.rak.toLowerCase().includes(q);
             });
+
+            // 2. Filter Rak
+            if (filterRak !== "") {
+                result = result.filter(item => item.rak.toLowerCase().includes(filterRak.toLowerCase()));
+            }
+
+            // 3. Sorting Engine (Option B Presets)
+            result.sort((a, b) => {
+                switch (sortStok) {
+                    case "name_asc": return a.name.localeCompare(b.name);
+                    case "name_desc": return b.name.localeCompare(a.name);
+                    case "stock_desc": return b.stock - a.stock;
+                    case "stock_asc": return a.stock - b.stock;
+                    case "price_asc": return a.price - b.price;
+                    case "price_desc": return b.price - a.price;
+                    default: return 0;
+                }
+            });
+
+            // 4. Pagination Slicing
+            const totalItems = result.length;
+            const totalPages = Math.ceil(totalItems / STOK_PAGE_SIZE) || 1;
+            currentStokPage = Math.max(1, Math.min(currentStokPage, totalPages));
+
+            const startIdx = (currentStokPage - 1) * STOK_PAGE_SIZE;
+            const endIdx = Math.min(startIdx + STOK_PAGE_SIZE, totalItems);
+            const paginatedRows = result.slice(startIdx, endIdx);
+
+            // 5. Render ke Tabel
+            const tbody = document.getElementById("tableStokKasirBody");
+            tbody.innerHTML = "";
+
+            if (paginatedRows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted"><i class="bi bi-search fs-3 d-block mb-1"></i>Obat tidak ditemukan pada rak tersebut.</td></tr>`;
+                document.getElementById("stokPaginationInfo").innerText = "0 obat ditemukan";
+                document.getElementById("stokPaginationControls").innerHTML = "";
+                return;
+            }
+
+            paginatedRows.forEach(item => {
+                const isLow = item.stock <= 5;
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>
+                        <code>${item.code}</code>
+                        <div class="fw-bold mt-1" style="color: var(--text-heading);">${item.name}</div>
+                    </td>
+                    <td><span class="badge bg-light text-dark border">${item.form}</span></td>
+                    <td><span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-geo-alt me-1"></i>${item.rak}</span></td>
+                    <td><strong style="color: var(--brand-teal);">Rp ${item.price.toLocaleString('id-ID')}</strong> <small class="text-muted">/ ${item.unit}</small></td>
+                    <td>
+                        <span class="badge ${isLow ? 'bg-warning-subtle text-warning-emphasis' : 'bg-success-subtle text-success'} rounded-pill px-2 py-1">
+                            ${isLow ? '<i class="bi bi-exclamation-triangle me-1"></i>Stok Tipis (' + item.stock + ')' : '<i class="bi bi-check-circle me-1"></i>Tersedia (' + item.stock + ')'}
+                        </span>
+                    </td>
+                    <td style="color: ${item.fefo.includes('2026') ? 'var(--danger-red)' : 'var(--text-muted)'}; font-size: 0.8rem; font-weight: 600;">
+                        ${item.fefo}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // 6. Pagination Controls
+            document.getElementById("stokPaginationInfo").innerText = `Menampilkan ${startIdx + 1}-${endIdx} dari ${totalItems} obat`;
+            renderStokPaginationUI(totalPages);
         }
+
+        function renderStokPaginationUI(totalPages) {
+            const controls = document.getElementById("stokPaginationControls");
+            controls.innerHTML = "";
+
+            const prev = document.createElement("button");
+            prev.className = "page-pill-btn";
+            prev.innerHTML = '<i class="bi bi-chevron-left"></i>';
+            prev.disabled = (currentStokPage === 1);
+            prev.onclick = () => { currentStokPage--; runStokPipeline(); };
+            controls.appendChild(prev);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement("button");
+                btn.className = `page-pill-btn ${i === currentStokPage ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => { currentStokPage = i; runStokPipeline(); };
+                controls.appendChild(btn);
+            }
+
+            const next = document.createElement("button");
+            next.className = "page-pill-btn";
+            next.innerHTML = '<i class="bi bi-chevron-right"></i>';
+            next.disabled = (currentStokPage === totalPages);
+            next.onclick = () => { currentStokPage++; runStokPipeline(); };
+            controls.appendChild(next);
+        }
+
+        function onStokSearch(val) {
+            searchStok = val;
+            currentStokPage = 1;
+            runStokPipeline();
+        }
+
+        function onStokRakChange(val) {
+            filterRak = val;
+            currentStokPage = 1;
+            runStokPipeline();
+        }
+
+        function onStokSortChange(val) {
+            sortStok = val;
+            currentStokPage = 1;
+            runStokPipeline();
+        }
+
+        // Run
+        runStokPipeline();
     </script>
 </body>
 </html>

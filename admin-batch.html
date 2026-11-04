@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penerimaan Batch Obat - PharmaSentinel</title>
+    <title>Penerimaan Batch & Logistik - PharmaSentinel</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -11,7 +11,7 @@
 </head>
 <body>
 
-    <!-- 1. DYNAMIC ISLAND WRAPPER + SATELLITE LOCK -->
+    <!-- 1. DYNAMIC ISLAND WRAPPER + FLOATING SATELLITE LOCK -->
     <div class="island-outer-wrapper">
         <button class="island-lock-satellite" id="btnNavLock" title="Kunci Tampilan Navbar">
             <i class="bi bi-unlock-fill lock-icon"></i>
@@ -28,26 +28,11 @@
 
             <div class="island-collapsible-content">
                 <ul class="island-menu">
-                    <li>
-                        <a href="admin-dashboard.html" class="island-link">
-                            <i class="bi bi-radar"></i> Radar & Telemetri
-                        </a>
-                    </li>
-                    <li>
-                        <a href="admin-katalog.html" class="island-link">
-                            <i class="bi bi-database"></i> Master Katalog
-                        </a>
-                    </li>
-                    <li>
-                        <a href="admin-batch.html" class="island-link active">
-                            <i class="bi bi-box-seam"></i> Penerimaan Batch
-                        </a>
-                    </li>
-                    <li>
-                        <a href="admin-karantina.html" class="island-link">
-                            <i class="bi bi-shield-slash"></i> Karantina ED
-                        </a>
-                    </li>
+                    <li><a href="admin-dashboard.html" class="island-link"><i class="bi bi-radar"></i> Radar & Telemetri</a></li>
+                    <li><a href="admin-katalog.html" class="island-link"><i class="bi bi-database"></i> Master Katalog</a></li>
+                    <li><a href="admin-batch.html" class="island-link active"><i class="bi bi-box-seam"></i> Penerimaan Batch</a></li>
+                    <li><a href="admin-audit.html" class="island-link"><i class="bi bi-clipboard-check"></i> Audit Shift</a></li>
+                    <li><a href="admin-karantina.html" class="island-link"><i class="bi bi-shield-slash"></i> Karantina ED</a></li>
                 </ul>
 
                 <div class="island-user">
@@ -63,8 +48,8 @@
     <div class="workspace-wrapper" style="margin-top: 95px;">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h3 class="fw-bold m-0">Penerimaan Logistik & Batch Baru</h3>
-                <p class="text-muted small m-0">Registrasi kedatangan obat fisik dari distributor (PBF) langsung ke antrean FEFO.</p>
+                <h3 class="fw-bold m-0" style="color: var(--text-heading);">Penerimaan Logistik & Manajemen Batch</h3>
+                <p class="small m-0" style="color: var(--text-muted);">Registrasi faktur surat jalan PBF fisik, kontrol kualitas batch, dan audit antrean FEFO.</p>
             </div>
             <span class="badge bg-white text-dark border px-3 py-2 rounded-pill shadow-sm">
                 <i class="bi bi-shield-check text-success"></i> Auto-Sorting FEFO Enabled
@@ -72,18 +57,23 @@
         </div>
 
         <div class="row g-4">
-            <!-- FORMULIR INPUT BATCH (KIRI) -->
-            <div class="col-lg-5">
+            <!-- FORMULIR INPUT BATCH (KIRI - 35% LAYAR) -->
+            <div class="col-xl-4 col-lg-5">
                 <div class="card border-0 shadow-sm rounded-4 p-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
                     <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
                         <i class="bi bi-file-earmark-plus text-teal fs-5" style="color: var(--brand-teal);"></i>
-                        <h6 class="fw-bold m-0">Formulir Surat Jalan PBF</h6>
+                        <h6 class="fw-bold m-0" style="color: var(--text-heading);">Formulir Surat Jalan PBF</h6>
                     </div>
 
                     <form onsubmit="handleBatchEntry(event)">
-                        <!-- PILIH DISTRIBUTOR -->
+                        <!-- PILIH DISTRIBUTOR + QUICK ADD PBF BUTTON -->
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">Distributor / PBF Pengirim</label>
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label small fw-bold m-0" style="color: var(--text-heading);">Distributor / PBF</label>
+                                <button type="button" class="btn btn-link p-0 text-decoration-none small fw-bold" style="color: var(--brand-teal); font-size: 0.76rem;" data-bs-toggle="modal" data-bs-target="#modalTambahPBF">
+                                    <i class="bi bi-plus-circle me-1"></i>+ PBF Baru
+                                </button>
+                            </div>
                             <select class="form-select rounded-pill px-3" required id="inputDistributor">
                                 <option value="">-- Pilih Instansi PBF --</option>
                                 <option>PT. Kimia Farma Trading</option>
@@ -95,7 +85,7 @@
 
                         <!-- NOMOR FAKTUR -->
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">Nomor Surat Jalan / Faktur</label>
+                            <label class="form-label small fw-bold" style="color: var(--text-heading);">No. Surat Jalan / Faktur</label>
                             <input type="text" class="form-control rounded-pill px-3" placeholder="Contoh: SJ-2026/KF/1089" required id="inputFaktur">
                         </div>
 
@@ -103,19 +93,23 @@
 
                         <!-- PILIH OBAT -->
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">Pilih Katalog Master Obat</label>
+                            <label class="form-label small fw-bold" style="color: var(--text-heading);">Pilih Master Katalog Obat</label>
                             <select class="form-select rounded-pill px-3" required id="inputObat">
                                 <option value="">-- Pilih Obat --</option>
                                 <option value="Paracetamol 500mg">Paracetamol 500mg (Tablet)</option>
                                 <option value="Amoxicillin 500mg">Amoxicillin 500mg (Kapsul)</option>
                                 <option value="Cetirizine 10mg">Cetirizine 10mg (Tablet)</option>
                                 <option value="OBH Tropica Plus 100ml">OBH Tropica Plus 100ml (Sirup)</option>
+                                <option value="Ibuprofen 400mg">Ibuprofen 400mg (Kaplet)</option>
+                                <option value="Antasida Doen Suspensi">Antasida Doen Suspensi (Botol)</option>
+                                <option value="Cefixime 100mg">Cefixime 100mg (Kapsul)</option>
+                                <option value="Dexamethasone 0.5mg">Dexamethasone 0.5mg (Tablet)</option>
                             </select>
                         </div>
 
                         <div class="row g-2 mb-3">
                             <div class="col-6">
-                                <label class="form-label small fw-bold">Nomor Batch Pabrik</label>
+                                <label class="form-label small fw-bold" style="color: var(--text-heading);">Nomor Batch Pabrik</label>
                                 <input type="text" class="form-control rounded-pill px-3" placeholder="Contoh: BTH-2026-X1" required id="inputBatchNo">
                             </div>
                             <div class="col-6">
@@ -126,176 +120,502 @@
 
                         <div class="row g-2 mb-4">
                             <div class="col-6">
-                                <label class="form-label small fw-bold">Jumlah Kuantitas</label>
-                                <input type="number" class="form-control rounded-pill px-3" placeholder="Kuantitas fisik" min="1" required id="inputQty">
+                                <label class="form-label small fw-bold" style="color: var(--text-heading);">Kuantitas Masuk</label>
+                                <input type="number" class="form-control rounded-pill px-3" placeholder="Jumlah unit" min="1" required id="inputQty">
                             </div>
                             <div class="col-6">
-                                <label class="form-label small fw-bold">Harga Beli Modal (Rp)</label>
+                                <label class="form-label small fw-bold" style="color: var(--text-heading);">Harga Modal Beli (Rp)</label>
                                 <input type="number" class="form-control rounded-pill px-3" placeholder="Rp per unit" required id="inputModal">
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-dark w-100 py-3 rounded-pill fw-bold" style="background: var(--brand-teal); border: none;">
+                        <button type="submit" class="btn btn-dark w-100 py-3 rounded-pill fw-bold shadow-sm" style="background: var(--brand-teal); border: none;">
                             <i class="bi bi-box-arrow-in-down me-1"></i> Masukkan ke Antrean FEFO
                         </button>
                     </form>
                 </div>
             </div>
 
-            <!-- LOG PENERIMAAN BATCH TERBARU (KANAN) -->
-            <div class="col-lg-7">
+            <!-- LOG BATCH & UNIFIED COMMAND TOOLBAR (KANAN - 65% LAYAR) -->
+            <div class="col-xl-8 col-lg-7">
                 <div class="card border-0 shadow-sm rounded-4 p-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div>
-                            <h6 class="fw-bold m-0"><i class="bi bi-clock-history text-muted me-2"></i>Log Penerimaan Batch Terbaru</h6>
-                            <small class="text-muted">Batch yang baru masuk otomatis disortir posisinya sesuai tanggal kedaluwarsa.</small>
+                    
+                    <!-- UNIFIED COMMAND TOOLBAR: SEARCH + FILTER PBF + SORT PRESETS -->
+                    <div class="row g-2 align-items-center mb-3 pb-3 border-bottom">
+                        <!-- 1. Live Search Input -->
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                                <input type="text" class="form-control form-control-sm border-start-0" id="batchSearchInput" placeholder="Cari obat, no batch, atau PBF..." oninput="onSearchChange(this.value)">
+                            </div>
                         </div>
-                        <span class="badge bg-light text-dark border rounded-pill px-2">Hari Ini: 28 Okt 2026</span>
+
+                        <!-- 2. Dropdown Filter PBF -->
+                        <div class="col-md-3 col-6">
+                            <select class="form-select form-select-sm rounded-pill" id="batchPbfFilter" onchange="onPbfFilterChange(this.value)">
+                                <option value="">Semua PBF (Distributor)</option>
+                                <option value="PT. Kimia Farma">PT. Kimia Farma</option>
+                                <option value="PT. Kalbe Farma">PT. Kalbe Farma</option>
+                                <option value="PT. Dexa Medica">PT. Dexa Medica</option>
+                                <option value="PT. Mensa Bina Sukses">PT. Mensa Bina Sukses</option>
+                            </select>
+                        </div>
+
+                        <!-- 3. Dropdown Sorting Presets (Opsi B: Human-Readable) -->
+                        <div class="col-md-4 col-6">
+                            <select class="form-select form-select-sm rounded-pill" id="batchSortSelect" onchange="onSortChange(this.value)">
+                                <option value="ed_asc">🟢 Batas ED: Terdekat (FEFO)</option>
+                                <option value="ed_desc">⚪ Batas ED: Paling Jauh / Aman</option>
+                                <option value="in_desc">⚪ Tgl Masuk: Paling Baru Datang</option>
+                                <option value="in_asc">⚪ Tgl Masuk: Paling Lama</option>
+                                <option value="name_asc">⚪ Nama Obat: A → Z</option>
+                                <option value="name_desc">⚪ Nama Obat: Z → A</option>
+                                <option value="qty_desc">⚪ Sisa Stok: Paling Banyak</option>
+                                <option value="qty_asc">⚪ Sisa Stok: Paling Sedikit</option>
+                            </select>
+                        </div>
                     </div>
 
+                    <!-- TABEL BATCH DATA -->
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
                             <thead>
-                                <tr style="font-size: 0.76rem; text-transform: uppercase;">
-                                    <th>No. Batch</th>
-                                    <th>Nama Obat</th>
-                                    <th>Distributor</th>
-                                    <th>Batas ED</th>
-                                    <th>Qty Masuk</th>
-                                    <th>Status FEFO</th>
+                                <tr style="font-size: 0.74rem; text-transform: uppercase; color: var(--text-muted);">
+                                    <th>No. Batch & Tgl Masuk</th>
+                                    <th>Nama Obat & PBF</th>
+                                    <th>Batas ED (FEFO)</th>
+                                    <th>Sisa Stok</th>
+                                    <th class="text-center">Aksi Gudang</th>
                                 </tr>
                             </thead>
-                            <tbody id="batchLogTableBody" style="font-size: 0.88rem;">
-                                <tr>
-                                    <td><code>BTH-PCT-A2</code></td>
-                                    <td><strong>Paracetamol 500mg</strong></td>
-                                    <td>PT. Kimia Farma</td>
-                                    <td><span class="text-success fw-bold">20 Jan 2027</span></td>
-                                    <td><strong>10 Strip</strong></td>
-                                    <td><span class="badge bg-success-subtle text-success rounded-pill">Antrean 2 (Aman)</span></td>
-                                </tr>
-                                <tr>
-                                    <td><code>BTH-AMX-09</code></td>
-                                    <td><strong>Amoxicillin 500mg</strong></td>
-                                    <td>PT. Kalbe Farma</td>
-                                    <td><span class="text-danger fw-bold">05 Nov 2026</span></td>
-                                    <td><strong>4 Strip</strong></td>
-                                    <td><span class="badge bg-danger-subtle text-danger rounded-pill">Prioritas 1 Kasir</span></td>
-                                </tr>
+                            <tbody id="batchLogTableBody" style="font-size: 0.86rem;">
+                                <!-- Diinjeksi via JavaScript Data Pipeline -->
                             </tbody>
                         </table>
                     </div>
-                     <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
-                        <small class="text-muted fw-bold" id="batchPaginationInfo">Memuat...</small>
+
+                    <!-- PAGINATION BAR INSTAN (ZERO RELOAD) -->
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                        <small class="text-muted fw-bold" id="batchPaginationInfo">Memuat antrean...</small>
                         <ul class="pagination-cockpit m-0" id="batchPaginationControls"></ul>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- MODAL 1: QUICK-ADD PBF BARU -->
+    <div class="modal fade" id="modalTambahPBF" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 p-3 border-0 shadow">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold" style="color: var(--text-heading);"><i class="bi bi-building-add text-teal me-2" style="color: var(--brand-teal);"></i>Registrasi Distributor (PBF) Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small" style="color: var(--text-muted);">Daftarkan pedagang besar farmasi baru agar langsung muncul pada pilihan faktur penerimaan.</p>
+                    <form onsubmit="handleQuickAddPBF(event)">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold" style="color: var(--text-heading);">Nama Lengkap Perusahaan PBF</label>
+                            <input type="text" class="form-control rounded-pill px-3" placeholder="Contoh: PT. Anugrah Argon Medica" required id="newPbfName">
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold" style="color: var(--text-heading);">No. Izin PBF / BPOM</label>
+                                <input type="text" class="form-control rounded-pill px-3" placeholder="Contoh: PBF-JBR/109/2024" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold" style="color: var(--text-heading);">No. Telepon / Sales</label>
+                                <input type="text" class="form-control rounded-pill px-3" placeholder="(021) 5678-xxxx" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold" style="color: var(--text-heading);">Alamat Kantor / Gudang PBF</label>
+                            <textarea class="form-control rounded-3" rows="2" placeholder="Alamat lengkap distributor..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100 py-2 rounded-pill fw-bold" style="background: var(--brand-teal); border: none;">
+                            Simpan & Pilih di Formulir
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: TARIK KARANTINA MANUAL (PENGECUALIAN RUSAK / CACAT FISIK / RECALL BPOM) -->
+    <div class="modal fade" id="modalKarantinaManual" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 p-3 border-0 shadow">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold text-danger"><i class="bi bi-shield-exclamation me-2"></i>Tarik Batch ke Karantina Manual</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted mb-2">Tindakan ini akan mencabut obat dari etalase kasir POS dan memindahkannya ke ruang karantina logistik.</p>
+                    
+                    <div class="p-3 rounded-3 mb-3 bg-light border">
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span>Batch & Obat:</span>
+                            <strong id="karantinaBatchObat" style="color: var(--text-heading);">-</strong>
+                        </div>
+                        <div class="d-flex justify-content-between small">
+                            <span>Stok Aktif di Rak:</span>
+                            <strong id="karantinaStokSisa" class="text-danger">-</strong>
+                        </div>
+                    </div>
+
+                    <form onsubmit="prosesKarantinaManual(event)">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold" style="color: var(--text-heading);">Jumlah Unit yang Ditarik</label>
+                            <input type="number" class="form-control rounded-pill px-3" id="karantinaInputQty" min="1" required>
+                            <small class="text-muted" style="font-size: 0.72rem;">Bisa ditarik sebagian atau seluruh sisa stok.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold" style="color: var(--text-heading);">Alasan Penarikan Resmi</label>
+                            <select class="form-select rounded-pill px-3" required id="karantinaAlasan">
+                                <option value="Kerusakan Fisik / Segel Bocor di Rak">Kerusakan Fisik / Segel Bocor di Rak</option>
+                                <option value="Perubahan Warna / Tablet Lembap">Perubahan Warna / Tablet Lembap</option>
+                                <option value="Penarikan Resmi BPOM (Batch Recall)">Penarikan Resmi BPOM (Batch Recall)</option>
+                                <option value="Karantina Dini Menjelang Jendela Retur PBF">Karantina Dini Menjelang Jendela Retur PBF</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger w-100 py-2 rounded-pill fw-bold">
+                            Konfirmasi Isolasi ke Karantina
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: KOREKSI TYPO / EDIT BATCH -->
+    <div class="modal fade" id="modalEditBatch" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content rounded-4 p-3 border-0 shadow">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h6 class="modal-title fw-bold" style="color: var(--text-heading);"><i class="bi bi-pencil-square text-teal me-2" style="color: var(--brand-teal);"></i>Koreksi Data Batch</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="prosesSimpanKoreksi(event)">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">No. Batch Pabrik</label>
+                            <input type="text" class="form-control rounded-pill px-3" id="editBatchNo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Batas ED (YYYY-MM-DD)</label>
+                            <input type="date" class="form-control rounded-pill px-3" id="editBatchED" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Alasan Koreksi Audit</label>
+                            <input type="text" class="form-control rounded-pill px-3" placeholder="Salah ketik faktur..." required>
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100 rounded-pill py-2 fw-bold" style="background: var(--brand-teal); border: none;">
+                            Simpan Koreksi
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT BOOTSTRAP & DYNAMIC ISLAND ENGINE -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/navbar.js"></script>
+
+    <!-- SCRIPT SINGLE DATA PIPELINE (SEARCH + FILTER + SORT + PAGINATION ANTI-TABRAKAN) -->
     <script>
-        // DATASET SIMULASI BATCH LOG (12 DATA)
-        let batchLogs = [
-            { no: "BTH-PCT-A2", obat: "Paracetamol 500mg", pbf: "PT. Kimia Farma", ed: "20 Jan 2027", qty: "10 Strip", status: "Antrean 2 (Aman)", badge: "bg-success-subtle text-success" },
-            { no: "BTH-AMX-09", obat: "Amoxicillin 500mg", pbf: "PT. Kalbe Farma", ed: "05 Nov 2026", qty: "4 Strip", status: "Prioritas 1 Kasir", badge: "bg-danger-subtle text-danger" },
-            { no: "BTH-CTZ-77", obat: "Cetirizine 10mg", pbf: "PT. Kimia Farma", ed: "10 Des 2026", qty: "25 Strip", status: "Antrean 2", badge: "bg-warning-subtle text-warning-emphasis" },
-            { no: "BTH-OBH-01", obat: "OBH Tropica Plus", pbf: "PT. Dexa Medica", ed: "18 Mei 2027", qty: "8 Botol", status: "Antrean 2 (Aman)", badge: "bg-success-subtle text-success" },
-            { no: "BTH-IBU-12", obat: "Ibuprofen 400mg", pbf: "PT. Kalbe Farma", ed: "22 Nov 2026", qty: "5 Strip", status: "Prioritas 1 Kasir", badge: "bg-danger-subtle text-danger" },
-            { no: "BTH-ATD-03", obat: "Antasida Doen Suspensi", pbf: "PT. Mensa Bina Sukses", ed: "02 Des 2026", qty: "3 Botol", status: "Prioritas 1 Kasir", badge: "bg-danger-subtle text-danger" },
-            { no: "BTH-CFX-88", obat: "Cefixime 100mg", pbf: "PT. Kalbe Farma", ed: "15 Jan 2027", qty: "6 Strip", status: "Antrean 2", badge: "bg-success-subtle text-success" },
-            { no: "BTH-DXM-01", obat: "Dexamethasone 0.5mg", pbf: "PT. Kimia Farma", ed: "08 Des 2026", qty: "20 Strip", status: "Antrean 2", badge: "bg-warning-subtle text-warning-emphasis" },
-            { no: "BTH-OMP-04", obat: "Omeprazole 20mg", pbf: "PT. Dexa Medica", ed: "14 Des 2026", qty: "12 Strip", status: "Antrean 2", badge: "bg-warning-subtle text-warning-emphasis" },
-            { no: "BTH-VTC-90", obat: "Vitamin C 500mg IPI", pbf: "PT. Kimia Farma", ed: "10 Mar 2027", qty: "30 Botol", status: "Antrean 2 (Aman)", badge: "bg-success-subtle text-success" },
-            { no: "BTH-LPR-11", obat: "Loperamide 2mg", pbf: "PT. Mensa Bina Sukses", ed: "28 Nov 2026", qty: "18 Strip", status: "Prioritas 1 Kasir", badge: "bg-danger-subtle text-danger" },
-            { no: "BTH-ASM-02", obat: "Asam Mefenamat", pbf: "PT. Kalbe Farma", ed: "12 Jan 2027", qty: "14 Strip", status: "Antrean 2", badge: "bg-success-subtle text-success" }
+        // DATASET UTAMA BATCH LOG DENGAN FORMAT TANGGAL ISO LENGKAP UNTUK SORTING AKURAT
+        let batchDataMaster = [
+            { id: 1, no: "BTH-AMX-09", obat: "Amoxicillin 500mg", pbf: "PT. Kalbe Farma", inDate: "2026-10-15", edIso: "2026-11-05", edFmt: "05 Nov 2026", stock: 4, unit: "Strip", status: "Kritis (H-1)", badge: "bg-danger-subtle text-danger" },
+            { id: 2, no: "BTH-PCT-A1", obat: "Paracetamol 500mg", pbf: "PT. Kimia Farma", inDate: "2026-10-10", edIso: "2026-11-15", edFmt: "15 Nov 2026", stock: 3, unit: "Strip", status: "Kritis (H-11)", badge: "bg-danger-subtle text-danger" },
+            { id: 3, no: "BTH-IBU-12", obat: "Ibuprofen 400mg", pbf: "PT. Kalbe Farma", inDate: "2026-10-20", edIso: "2026-11-22", edFmt: "22 Nov 2026", stock: 5, unit: "Strip", status: "Kritis (H-18)", badge: "bg-danger-subtle text-danger" },
+            { id: 4, no: "BTH-LPR-11", obat: "Loperamide 2mg", pbf: "PT. Mensa Bina Sukses", inDate: "2026-10-22", edIso: "2026-11-28", edFmt: "28 Nov 2026", stock: 18, unit: "Strip", status: "Kritis (H-24)", badge: "bg-danger-subtle text-danger" },
+            { id: 5, no: "BTH-ATD-03", obat: "Antasida Doen Suspensi", pbf: "PT. Mensa Bina Sukses", inDate: "2026-10-18", edIso: "2026-12-02", edFmt: "02 Des 2026", stock: 3, unit: "Botol", status: "Waspada (H-28)", badge: "bg-warning-subtle text-warning-emphasis" },
+            { id: 6, no: "BTH-DXM-01", obat: "Dexamethasone 0.5mg", pbf: "PT. Kimia Farma", inDate: "2026-10-12", edIso: "2026-12-08", edFmt: "08 Des 2026", stock: 20, unit: "Strip", status: "Waspada (H-34)", badge: "bg-warning-subtle text-warning-emphasis" },
+            { id: 7, no: "BTH-CTZ-77", obat: "Cetirizine 10mg", pbf: "PT. Kimia Farma", inDate: "2026-10-25", edIso: "2026-12-10", edFmt: "10 Des 2026", stock: 25, unit: "Strip", status: "Waspada (H-36)", badge: "bg-warning-subtle text-warning-emphasis" },
+            { id: 8, no: "BTH-OMP-04", obat: "Omeprazole 20mg", pbf: "PT. Dexa Medica", inDate: "2026-10-28", edIso: "2026-12-14", edFmt: "14 Des 2026", stock: 12, unit: "Strip", status: "Waspada (H-40)", badge: "bg-warning-subtle text-warning-emphasis" },
+            { id: 9, no: "BTH-ASM-02", obat: "Asam Mefenamat", pbf: "PT. Kalbe Farma", inDate: "2026-10-26", edIso: "2027-01-12", edFmt: "12 Jan 2027", stock: 14, unit: "Strip", status: "Aman", badge: "bg-success-subtle text-success" },
+            { id: 10, no: "BTH-CFX-88", obat: "Cefixime 100mg", pbf: "PT. Kalbe Farma", inDate: "2026-10-29", edIso: "2027-01-15", edFmt: "15 Jan 2027", stock: 6, unit: "Strip", status: "Aman", badge: "bg-success-subtle text-success" },
+            { id: 11, no: "BTH-PCT-A2", obat: "Paracetamol 500mg", pbf: "PT. Kimia Farma", inDate: "2026-10-30", edIso: "2027-01-20", edFmt: "20 Jan 2027", stock: 10, unit: "Strip", status: "Aman", badge: "bg-success-subtle text-success" },
+            { id: 12, no: "BTH-VTC-90", obat: "Vitamin C 500mg IPI", pbf: "PT. Kimia Farma", inDate: "2026-11-01", edIso: "2027-03-10", edFmt: "10 Mar 2027", stock: 30, unit: "Botol", status: "Aman", badge: "bg-success-subtle text-success" },
+            { id: 13, no: "BTH-OBH-01", obat: "OBH Tropica Plus", pbf: "PT. Dexa Medica", inDate: "2026-11-02", edIso: "2027-05-18", edFmt: "18 Mei 2027", stock: 8, unit: "Botol", status: "Aman", badge: "bg-success-subtle text-success" }
         ];
 
-        let currentBatchPage = 1;
-        const BATCH_PAGE_SIZE = 5; // 5 baris per halaman
+        // STATE CONTROLLERS
+        let searchKeyword = "";
+        let selectedPbf = "";
+        let selectedSort = "ed_asc"; // Default FEFO Order
+        let currentPage = 1;
+        const PAGE_SIZE = 5; // 5 Baris per halaman
 
-        function renderBatchTable() {
+        let targetBatchForAction = null;
+
+        // INTI: SINGLE PIPELINE PEMROSESAN DATA TERPADU
+        function processAndRenderPipeline() {
+            // 1. TAHAP LIVE SEARCH
+            let result = batchDataMaster.filter(item => {
+                const q = searchKeyword.toLowerCase();
+                return item.obat.toLowerCase().includes(q) ||
+                       item.no.toLowerCase().includes(q) ||
+                       item.pbf.toLowerCase().includes(q);
+            });
+
+            // 2. TAHAP FILTER DROPDOWN PBF
+            if (selectedPbf !== "") {
+                result = result.filter(item => item.pbf.toLowerCase().includes(selectedPbf.toLowerCase()));
+            }
+
+            // 3. TAHAP SORTING ENGINE
+            result.sort((a, b) => {
+                switch (selectedSort) {
+                    case "ed_asc": // FEFO Murni: ED Paling Cepat / Lampau ke Atas
+                        return new Date(a.edIso) - new Date(b.edIso);
+                    case "ed_desc": // ED Paling Jauh
+                        return new Date(b.edIso) - new Date(a.edIso);
+                    case "in_desc": // Tgl Masuk Terbaru
+                        return new Date(b.inDate) - new Date(a.inDate);
+                    case "in_asc": // Tgl Masuk Paling Lama
+                        return new Date(a.inDate) - new Date(b.inDate);
+                    case "name_asc": // Nama A-Z
+                        return a.obat.localeCompare(b.obat);
+                    case "name_desc": // Nama Z-A
+                        return b.obat.localeCompare(a.obat);
+                    case "qty_desc": // Stok Terbanyak
+                        return b.stock - a.stock;
+                    case "qty_asc": // Stok Tersedikit
+                        return a.stock - b.stock;
+                    default:
+                        return 0;
+                }
+            });
+
+            // 4. TAHAP PAGINATION SLICING
+            const totalItems = result.length;
+            const totalPages = Math.ceil(totalItems / PAGE_SIZE) || 1;
+            currentPage = Math.max(1, Math.min(currentPage, totalPages));
+
+            const startIdx = (currentPage - 1) * PAGE_SIZE;
+            const endIdx = Math.min(startIdx + PAGE_SIZE, totalItems);
+            const paginatedRows = result.slice(startIdx, endIdx);
+
+            // 5. TAHAP GAMBAR KE TABEL
             const tbody = document.getElementById("batchLogTableBody");
             tbody.innerHTML = "";
 
-            const total = batchLogs.length;
-            const totalPages = Math.ceil(total / BATCH_PAGE_SIZE) || 1;
-            currentBatchPage = Math.max(1, Math.min(currentBatchPage, totalPages));
+            if (paginatedRows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted"><i class="bi bi-inbox fs-3 d-block mb-1"></i>Tidak ada batch yang cocok dengan kriteria filter.</td></tr>`;
+                document.getElementById("batchPaginationInfo").innerText = "0 data ditemukan";
+                document.getElementById("batchPaginationControls").innerHTML = "";
+                return;
+            }
 
-            const start = (currentBatchPage - 1) * BATCH_PAGE_SIZE;
-            const end = Math.min(start + BATCH_PAGE_SIZE, total);
-            const pageData = batchLogs.slice(start, end);
-
-            pageData.forEach(item => {
+            paginatedRows.forEach(item => {
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
-                    <td><code>${item.no}</code></td>
-                    <td><strong>${item.obat}</strong></td>
-                    <td>${item.pbf}</td>
-                    <td><span class="text-teal fw-bold" style="color: var(--brand-teal);">${item.ed}</span></td>
-                    <td><strong>${item.qty}</strong></td>
-                    <td><span class="badge ${item.badge} rounded-pill">${item.status}</span></td>
+                    <td>
+                        <code>${item.no}</code>
+                        <div class="small text-muted" style="font-size: 0.72rem;"><i class="bi bi-calendar3 me-1"></i>Masuk: ${item.inDate}</div>
+                    </td>
+                    <td>
+                        <strong style="color: var(--text-heading);">${item.obat}</strong>
+                        <div class="small text-muted">${item.pbf}</div>
+                    </td>
+                    <td>
+                        <span class="fw-bold" style="color: ${item.status.includes('Kritis') ? 'var(--danger-red)' : 'var(--text-heading)'};">${item.edFmt}</span>
+                        <div><span class="badge ${item.badge} rounded-pill" style="font-size: 0.68rem;">${item.status}</span></div>
+                    </td>
+                    <td>
+                        <strong style="color: var(--text-heading);">${item.stock}</strong> <small class="text-muted">${item.unit}</small>
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-secondary rounded-pill px-2 py-0 me-1" title="Koreksi Typo" onclick="openEditModal(${item.id})">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-outline-danger rounded-pill px-2 py-0" title="Tarik Karantina Manual" onclick="openKarantinaModal(${item.id})">
+                                <i class="bi bi-shield-exclamation"></i> Karantina
+                            </button>
+                        </div>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            // Update UI Pagination
-            document.getElementById("batchPaginationInfo").innerText = `Menampilkan ${start + 1}-${end} dari ${total} batch log`;
+            // 6. RENDER KONTROL TOMBOL PAGINATION
+            document.getElementById("batchPaginationInfo").innerText = `Menampilkan ${startIdx + 1}-${endIdx} dari ${totalItems} batch log`;
+            renderPaginationControlsUI(totalPages);
+        }
+
+        function renderPaginationControlsUI(totalPages) {
             const controls = document.getElementById("batchPaginationControls");
             controls.innerHTML = "";
 
-            // Prev
+            // Tombol Prev
             const prev = document.createElement("button");
             prev.className = "page-pill-btn";
             prev.innerHTML = '<i class="bi bi-chevron-left"></i>';
-            prev.disabled = (currentBatchPage === 1);
-            prev.onclick = () => { currentBatchPage--; renderBatchTable(); };
+            prev.disabled = (currentPage === 1);
+            prev.onclick = () => { currentPage--; processAndRenderPipeline(); };
             controls.appendChild(prev);
 
-            // Numbers
+            // Nomor Halaman
             for (let i = 1; i <= totalPages; i++) {
                 const btn = document.createElement("button");
-                btn.className = `page-pill-btn ${i === currentBatchPage ? 'active' : ''}`;
+                btn.className = `page-pill-btn ${i === currentPage ? 'active' : ''}`;
                 btn.innerText = i;
-                btn.onclick = () => { currentBatchPage = i; renderBatchTable(); };
+                btn.onclick = () => { currentPage = i; processAndRenderPipeline(); };
                 controls.appendChild(btn);
             }
 
-            // Next
+            // Tombol Next
             const next = document.createElement("button");
             next.className = "page-pill-btn";
             next.innerHTML = '<i class="bi bi-chevron-right"></i>';
-            next.disabled = (currentBatchPage === totalPages);
-            next.onclick = () => { currentBatchPage++; renderBatchTable(); };
+            next.disabled = (currentPage === totalPages);
+            next.onclick = () => { currentPage++; processAndRenderPipeline(); };
             controls.appendChild(next);
         }
 
+        // HANDLERS YANG ME-RESET KE HALAMAN 1 (ANTI-TABRAKAN)
+        function onSearchChange(val) {
+            searchKeyword = val;
+            currentPage = 1;
+            processAndRenderPipeline();
+        }
+
+        function onPbfFilterChange(val) {
+            selectedPbf = val;
+            currentPage = 1;
+            processAndRenderPipeline();
+        }
+
+        function onSortChange(val) {
+            selectedSort = val;
+            currentPage = 1;
+            processAndRenderPipeline();
+        }
+
+        // 1. INPUT BATCH BARU
         function handleBatchEntry(e) {
             e.preventDefault();
             const obat = document.getElementById("inputObat").value;
             const batchNo = document.getElementById("inputBatchNo").value;
             const ed = document.getElementById("inputED").value;
-            const qty = document.getElementById("inputQty").value;
+            const qty = parseInt(document.getElementById("inputQty").value) || 0;
             const pbf = document.getElementById("inputDistributor").value;
 
             if (ed <= "2026-11-04") {
-                alert("PELANGGARAN FEFO: Tanggal kedaluwarsa sudah lampau! Ditolak masuk sistem.");
+                alert("PELANGGARAN HUKUM FARMASI: Tanggal kedaluwarsa sudah lampau! Ditolak masuk gudang.");
                 return;
             }
 
-            batchLogs.unshift({
-                no: batchNo, obat: obat, pbf: pbf, ed: ed, qty: qty + " Unit",
-                status: "Tercatat Aktif", badge: "bg-primary-subtle text-primary"
+            batchDataMaster.unshift({
+                id: Date.now(),
+                no: batchNo,
+                obat: obat,
+                pbf: pbf,
+                inDate: "2026-11-04",
+                edIso: ed,
+                edFmt: ed,
+                stock: qty,
+                unit: "Unit",
+                status: "Tercatat Baru",
+                badge: "bg-primary-subtle text-primary"
             });
 
-            currentBatchPage = 1;
-            renderBatchTable();
-            alert(`Batch ${batchNo} berhasil dicatat dan masuk ke antrean FEFO!`);
+            currentPage = 1;
+            processAndRenderPipeline();
+            alert(`Batch ${batchNo} (${obat}) berhasil dicatat ke antrean FEFO!`);
             e.target.reset();
         }
 
-        renderBatchTable();
+        // 2. QUICK-ADD PBF BARU
+        function handleQuickAddPBF(e) {
+            e.preventDefault();
+            const newName = document.getElementById("newPbfName").value;
+            
+            // Tambahkan ke dropdown form penerimaan
+            const selectPbf = document.getElementById("inputDistributor");
+            const opt1 = document.createElement("option");
+            opt1.value = newName;
+            opt1.innerText = newName;
+            opt1.selected = true;
+            selectPbf.appendChild(opt1);
+
+            // Tambahkan juga ke dropdown filter toolbar
+            const filterPbf = document.getElementById("batchPbfFilter");
+            const opt2 = document.createElement("option");
+            opt2.value = newName;
+            opt2.innerText = newName;
+            filterPbf.appendChild(opt2);
+
+            alert(`Distributor baru "${newName}" berhasil didaftarkan dan langsung terpilih di formulir!`);
+            bootstrap.Modal.getInstance(document.getElementById("modalTambahPBF")).hide();
+            e.target.reset();
+        }
+
+        // 3. MODAL KARANTINA MANUAL
+        function openKarantinaModal(id) {
+            targetBatchForAction = batchDataMaster.find(b => b.id === id);
+            if (!targetBatchForAction) return;
+
+            document.getElementById("karantinaBatchObat").innerText = `${targetBatchForAction.no} (${targetBatchForAction.obat})`;
+            document.getElementById("karantinaStokSisa").innerText = `${targetBatchForAction.stock} ${targetBatchForAction.unit}`;
+            document.getElementById("karantinaInputQty").max = targetBatchForAction.stock;
+            document.getElementById("karantinaInputQty").value = targetBatchForAction.stock;
+
+            new bootstrap.Modal(document.getElementById("modalKarantinaManual")).show();
+        }
+
+        function prosesKarantinaManual(e) {
+            e.preventDefault();
+            const pullQty = parseInt(document.getElementById("karantinaInputQty").value);
+            const alasan = document.getElementById("karantinaAlasan").value;
+
+            if (pullQty > targetBatchForAction.stock) {
+                alert("Jumlah tarikan melebihi stok yang ada di rak!");
+                return;
+            }
+
+            targetBatchForAction.stock -= pullQty;
+            if (targetBatchForAction.stock === 0) {
+                // Jika ditarik semua, hapus dari baris aktif
+                batchDataMaster = batchDataMaster.filter(b => b.id !== targetBatchForAction.id);
+            }
+
+            processAndRenderPipeline();
+            bootstrap.Modal.getInstance(document.getElementById("modalKarantinaManual")).hide();
+
+            alert(`AUDIT LOGISTIK: Sebanyak ${pullQty} unit batch ${targetBatchForAction.no} berhasil ditarik ke Karantina!\nAlasan: ${alasan}.\nStok kasir POS otomatis terpotong aman.`);
+        }
+
+        // 4. MODAL KOREKSI TYPO BATCH
+        function openEditModal(id) {
+            targetBatchForAction = batchDataMaster.find(b => b.id === id);
+            if (!targetBatchForAction) return;
+
+            document.getElementById("editBatchNo").value = targetBatchForAction.no;
+            document.getElementById("editBatchED").value = targetBatchForAction.edIso;
+            new bootstrap.Modal(document.getElementById("modalEditBatch")).show();
+        }
+
+        function prosesSimpanKoreksi(e) {
+            e.preventDefault();
+            targetBatchForAction.no = document.getElementById("editBatchNo").value;
+            targetBatchForAction.edIso = document.getElementById("editBatchED").value;
+            targetBatchForAction.edFmt = document.getElementById("editBatchED").value;
+
+            processAndRenderPipeline();
+            bootstrap.Modal.getInstance(document.getElementById("modalEditBatch")).hide();
+            alert("Data batch berhasil dikoreksi dan urutan FEFO otomatis disinkronkan kembali!");
+        }
+
+        // Jalankan saat halaman dibuka
+        processAndRenderPipeline();
     </script>
 </body>
 </html>
