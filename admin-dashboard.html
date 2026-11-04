@@ -8,39 +8,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        .radar-timeline-track {
-            background: #e2e8f0;
-            height: 8px;
-            border-radius: var(--radius-pill);
-            position: relative;
-            margin: 24px 0 16px 0;
-        }
-        .radar-timeline-fill {
-            background: linear-gradient(90deg, #f43f5e 0%, #f59e0b 50%, #10b981 100%);
-            height: 100%;
-            border-radius: var(--radius-pill);
-            width: 100%;
-        }
-        .bento-admin-stat {
-            background: var(--surface-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-card);
-            padding: 22px;
-            box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.04);
-            height: 100%;
-            transition: var(--transition-smooth);
-        }
-        .bento-admin-stat:hover {
-            transform: translateY(-3px);
-            border-color: var(--brand-teal);
-            box-shadow: 0 12px 28px -4px rgba(13, 148, 136, 0.12);
-        }
-    </style>
 </head>
 <body>
 
-    <!-- 1. DYNAMIC ISLAND WRAPPER + SATELLITE LOCK -->
+    <!-- 1. DYNAMIC ISLAND WRAPPER (NAVBAR URUTAN LOGIS BARU) -->
     <div class="island-outer-wrapper">
         <button class="island-lock-satellite" id="btnNavLock" title="Kunci Tampilan Navbar">
             <i class="bi bi-unlock-fill lock-icon"></i>
@@ -57,11 +28,31 @@
 
             <div class="island-collapsible-content">
                 <ul class="island-menu">
-                    <li><a href="admin-dashboard.html" class="island-link active"><i class="bi bi-radar"></i> Radar & Telemetri</a></li>
-                    <li><a href="admin-katalog.html" class="island-link"><i class="bi bi-database"></i> Master Katalog</a></li>
-                    <li><a href="admin-batch.html" class="island-link"><i class="bi bi-box-seam"></i> Penerimaan Batch</a></li>
-                    <li><a href="admin-audit.html" class="island-link"><i class="bi bi-clipboard-check"></i> Audit Shift</a></li>
-                    <li><a href="admin-karantina.html" class="island-link"><i class="bi bi-shield-slash"></i> Karantina ED</a></li>
+                    <li>
+                        <a href="admin-dashboard.html" class="island-link active">
+                            <i class="bi bi-radar"></i> Radar & Telemetri
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-katalog.html" class="island-link">
+                            <i class="bi bi-database"></i> Master Katalog
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-batch.html" class="island-link">
+                            <i class="bi bi-box-seam"></i> Penerimaan Batch
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-audit.html" class="island-link">
+                            <i class="bi bi-clipboard-check"></i> Audit Shift
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-karantina.html" class="island-link">
+                            <i class="bi bi-shield-slash"></i> Karantina ED
+                        </a>
+                    </li>
                 </ul>
 
                 <div class="island-user">
@@ -76,20 +67,20 @@
     <!-- 2. WORKSPACE UTAMA ADMIN (DASHBOARD & RADAR FEFO) -->
     <div class="workspace-wrapper" style="margin-top: 95px;">
         
-        <!-- HEADER LEVEL INFORMASI -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h3 class="fw-bold m-0" style="letter-spacing: -0.5px;">Gudang Telemetri & Kontrol FEFO</h3>
-                <p class="text-muted small m-0">Pemantauan menyeluruh batas kedaluwarsa fisik, valuasi modal inventaris, dan kepatuhan sistem.</p>
+                <h3 class="fw-bold m-0" style="color: var(--text-heading); letter-spacing: -0.5px;">Gudang Telemetri & Kontrol FEFO</h3>
+                <p class="small m-0" style="color: var(--text-muted);">Pemantauan menyeluruh batas kedaluwarsa fisik, valuasi modal inventaris, dan kepatuhan sistem.</p>
             </div>
             <div class="d-flex gap-2">
                 <span class="badge bg-white text-dark border px-3 py-2 rounded-pill shadow-sm d-flex align-items-center gap-2">
                     <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
                     FEFO Protocol: 100% Compliant
                 </span>
-                <button class="btn btn-dark btn-sm rounded-pill px-3 fw-bold" onclick="alert('Laporan Audit Gudang berhasil diunduh (PDF Simulated)')">
-                    <i class="bi bi-download me-1"></i> Audit Report
-                </button>
+                <!-- TOMBOL AUDIT REPORT LANGSUNG MENGARAH KE ADMIN-AUDIT.HTML -->
+                <a href="admin-audit.html" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold shadow-sm">
+                    <i class="bi bi-clipboard-check me-1"></i> Buka Audit Shift
+                </a>
             </div>
         </div>
 
@@ -101,7 +92,7 @@
                         <small class="text-muted fw-bold">Valuasi Stok Fisik</small>
                         <i class="bi bi-wallet2 text-teal fs-5" style="color: var(--brand-teal);"></i>
                     </div>
-                    <h3 class="fw-bold m-0">Rp 48.650.000</h3>
+                    <h3 class="fw-bold m-0" style="color: var(--text-heading);">Rp 48.650.000</h3>
                     <small class="text-success"><i class="bi bi-check2"></i> 148 SKU terdata aktif</small>
                 </div>
             </div>
@@ -141,10 +132,10 @@
         </div>
 
         <!-- 4. HERO RADAR: VISUAL EXPIRATION QUEUE (CORE VALUE FEFO) -->
-        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background: #ffffff; border: 1px solid var(--border-subtle) !important;">
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background: #ffffff; border: 1.5px solid var(--border-subtle) !important;">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h6 class="fw-bold m-0"><i class="bi bi-broadcast text-teal me-2" style="color: var(--brand-teal);"></i>Radar Antrean Kedaluwarsa Fisik (FEFO Priority Queue)</h6>
+                    <h6 class="fw-bold m-0" style="color: var(--text-heading);"><i class="bi bi-broadcast text-teal me-2" style="color: var(--brand-teal);"></i>Radar Antrean Kedaluwarsa Fisik (FEFO Priority Queue)</h6>
                     <small class="text-muted">Urutan batch obat yang wajib dihabiskan mesin kasir dari yang paling mendekati waktu kedaluwarsa.</small>
                 </div>
                 <span class="badge bg-light text-dark border rounded-pill px-3 py-2">
@@ -152,7 +143,6 @@
                 </span>
             </div>
 
-            <!-- TIMELINE VISUAL GRADIENT -->
             <div class="radar-timeline-track">
                 <div class="radar-timeline-fill"></div>
             </div>
@@ -162,11 +152,10 @@
                 <span class="text-success fw-bold"><i class="bi bi-shield-check"></i> Zona Aman (> 90 Hari)</span>
             </div>
 
-            <!-- TABEL DETAIL RADAR ED -->
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
-                        <tr style="font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <thead>
+                        <tr style="font-size: 0.74rem; text-transform: uppercase; color: var(--text-muted);">
                             <th>Nomor Batch</th>
                             <th>Nama Obat</th>
                             <th>Distributor (PBF)</th>
@@ -176,57 +165,42 @@
                             <th>Status Tindakan</th>
                         </tr>
                     </thead>
-                    <tbody style="font-size: 0.88rem;">
-                        <!-- ITEM 1: SANGAT KRITIS -->
+                    <tbody style="font-size: 0.86rem;">
                         <tr>
                             <td><code>BTH-AMX-09</code></td>
                             <td><strong>Amoxicillin 500mg</strong> <span class="badge bg-light text-muted border small">Kapsul</span></td>
                             <td>PT. Kalbe Farma Tbk</td>
-                            <td><span class="badge text-danger fw-bold" style="background: var(--danger-red-light); font-size: 0.82rem;">05 Nov 2026 (8 Hari Lagi)</span></td>
+                            <td><span class="badge text-danger fw-bold" style="background: var(--danger-red-light); font-size: 0.82rem;">05 Nov 2026 (1 Hari Lagi)</span></td>
                             <td><strong class="text-danger">4 Strip</strong></td>
                             <td>Rp 34.000</td>
-                            <td>
-                                <span class="badge rounded-pill bg-danger">Prioritas 1 Kasir</span>
-                            </td>
+                            <td><span class="badge rounded-pill bg-danger">Prioritas 1 Kasir</span></td>
                         </tr>
-
-                        <!-- ITEM 2: KRITIS -->
                         <tr>
                             <td><code>BTH-PCT-A1</code></td>
                             <td><strong>Paracetamol 500mg</strong> <span class="badge bg-light text-muted border small">Tablet</span></td>
                             <td>PT. Kimia Farma Trading</td>
-                            <td><span class="badge text-danger fw-bold" style="background: var(--danger-red-light); font-size: 0.82rem;">15 Nov 2026 (18 Hari Lagi)</span></td>
+                            <td><span class="badge text-danger fw-bold" style="background: var(--danger-red-light); font-size: 0.82rem;">15 Nov 2026 (11 Hari Lagi)</span></td>
                             <td><strong class="text-danger">3 Strip</strong></td>
                             <td>Rp 15.600</td>
-                            <td>
-                                <span class="badge rounded-pill bg-danger">Prioritas 1 Kasir</span>
-                            </td>
+                            <td><span class="badge rounded-pill bg-danger">Prioritas 1 Kasir</span></td>
                         </tr>
-
-                        <!-- ITEM 3: WASPADA -->
                         <tr>
                             <td><code>BTH-ATD-03</code></td>
                             <td><strong>Antasida Doen Suspensi</strong> <span class="badge bg-light text-muted border small">Botol</span></td>
                             <td>PT. Dexa Medica</td>
-                            <td><span class="badge text-warning fw-bold" style="background: var(--warning-amber-light); font-size: 0.82rem;">02 Des 2026 (35 Hari Lagi)</span></td>
+                            <td><span class="badge text-warning fw-bold" style="background: var(--warning-amber-light); font-size: 0.82rem;">02 Des 2026 (28 Hari Lagi)</span></td>
                             <td><strong>3 Botol</strong></td>
                             <td>Rp 25.500</td>
-                            <td>
-                                <span class="badge rounded-pill bg-warning text-dark">Antrean 2</span>
-                            </td>
+                            <td><span class="badge rounded-pill bg-warning text-dark">Antrean 2</span></td>
                         </tr>
-
-                        <!-- ITEM 4: WASPADA -->
                         <tr>
                             <td><code>BTH-CTZ-77</code></td>
                             <td><strong>Cetirizine 10mg</strong> <span class="badge bg-light text-muted border small">Tablet</span></td>
                             <td>PT. Kimia Farma Trading</td>
-                            <td><span class="badge text-warning fw-bold" style="background: var(--warning-amber-light); font-size: 0.82rem;">10 Des 2026 (43 Hari Lagi)</span></td>
+                            <td><span class="badge text-warning fw-bold" style="background: var(--warning-amber-light); font-size: 0.82rem;">10 Des 2026 (36 Hari Lagi)</span></td>
                             <td><strong>25 Strip</strong></td>
                             <td>Rp 112.500</td>
-                            <td>
-                                <span class="badge rounded-pill bg-warning text-dark">Antrean 2</span>
-                            </td>
+                            <td><span class="badge rounded-pill bg-warning text-dark">Antrean 2</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -235,6 +209,7 @@
 
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/navbar.js"></script>
 </body>
 </html>
